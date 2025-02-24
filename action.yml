@@ -1,13 +1,118 @@
 name: "Generate Repo File List"
 description: "Generates an HTML file list for a GitHub repository with links to each file."
 inputs:
+  log-level:
+    description: "Set the logging level setting manually instead of pulling from environment"
+    required: false
+    default: "INFO"
+  directory:
+    description: "Root directory of the repository to generate the file list for. Default is the current directory."
+    required: false
+    default: "."
   repo-url:
     description: "GitHub repository URL to use for generating file links. Default is determined by the Git configuration."
     required: false
+    default: "https://github.com/Nick2bad4u/UserStyles"
   fallback-repo-url:
     description: "Fallback GitHub repository URL to use if the default URL cannot be determined."
     required: false
     default: "https://github.com/author/repo"
+  output-format:
+    description: 'File Format to be output in, if using for readme.md via github use MD, for readme.md on web use html".'
+    required: false
+    default: "html"
+  output-file:
+    description: 'Name of the output HTML file to save the generated file list. Default is "file_list.md".'
+    required: false
+    default: "file_list.md"
+  color-source:
+    description: 'Source of colors for the file links. Choose "random" for randomly generated colors or "list" to use a predefined list of colors.'
+    required: false
+    default: "random"
+  color-list:
+    description: 'List of colors to use when the color source is set to "list". Provide colors in hex format (e.g., #FF0000).'
+    required: false
+    default: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
+  color-range:
+    description: "Range of colors (hex codes) for random color generation. Provide two hex codes representing the lower and upper bounds (e.g., --color-range #000000 #FFFFFF)."
+    required: false
+    default: "#000000 #FFFFFF"
+  exclude-dark-colors:
+    description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
+    required: false
+    default: "false"
+  exclude-bright-colors:
+    description: "Exclude bright colors from being used for file links. Use this option to avoid bright colors."
+    required: false
+    default: "false"
+  exclude-blacks:
+    description: "Exclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors."
+    required: false
+    default: "false"
+  max-attempts:
+    description: "Maximum number of attempts to generate a valid color. Default is 1000000."
+    required: false
+    default: "1000000"
+  exclude-blacks-threshold:
+    description: "Threshold for excluding black colors. Any color below this threshold on the color chart will be excluded (e.g., #222222)."
+    required: false
+    default: "#222222"
+  ensure-readable-colors:
+    description: "Ensure that the generated colors are readable by maintaining a certain contrast ratio with a white background."
+    required: false
+    default: "false"
+  repo-root-header:
+    description: 'Header text for files located in the root of the repository. Default is "Repo Root".'
+    required: false
+    default: "Repo Root"
+  header-text:
+    description: 'Header text for the file list displayed at the top of the generated HTML file. Default is "## File List".'
+    required: false
+    default: "## File List"
+  intro-text:
+    description: 'Introductory text for the file list displayed below the header in the generated HTML file. Default is "# Here is a list of files included in this repository:".'
+    required: false
+    default: "# Here is a list of files included in this repository:"
+  dark-color-luminance-threshold:
+    description: "Luminance threshold for determining if a color is dark. Colors with luminance below this value will be considered dark. Default is 128."
+    required: false
+    default: "128"
+  bright-color-luminance-threshold:
+    description: "Luminance threshold for determining if a color is bright. Colors with luminance above this value will be considered bright. Default is 200."
+    required: false
+    default: "200"
+  chunk-size:
+    description: "Number of lines per chunk for lazy loading the file list. Default is 40 lines per chunk."
+    required: false
+    default: "40"
+  viewport-mobile:
+    description: "Viewport size for mobile devices in pixels. Default is 768."
+    required: false
+    default: "768"
+  viewport-tablet:
+    description: "Viewport size for tablets in pixels. Default is 1024."
+    required: false
+    default: "1024"
+  viewport-small-desktop:
+    description: "Viewport size for small desktops in pixels. Default is 1440."
+    required: false
+    default: "1440"
+  root-margin-large-desktop:
+    description: 'Root margin for the IntersectionObserver for large desktop viewport. Default is "0px 0px 400px 0px".'
+    required: false
+    default: "0px 0px 400px 0px"
+  root-margin-small-desktop:
+    description: 'Root margin for the IntersectionObserver for small desktops. Default is "0px 0px 300px 0px".'
+    required: false
+    default: "0px 0px 300px 0px"
+  root-margin-tablet:
+    description: 'Root margin for the IntersectionObserver for tablets. Default is "0px 0px 200px 0px".'
+    required: false
+    default: "0px 0px 200px 0px"
+  root-margin-mobile:
+    description: 'Root margin for the IntersectionObserver for mobile devices. Default is "0px 0px 100px 0px".'
+    required: false
+    default: "0px 0px 100px 0px"
 runs:
   using: "docker"
   image: "Dockerfile"
