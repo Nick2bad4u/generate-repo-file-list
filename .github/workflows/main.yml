@@ -46,7 +46,7 @@ jobs:
           # For example: pip install requests
 
       - name: Run Generate Repo File List Action
-        uses: nick2bad4u/generate-repo-file-list
+        uses: nick2bad4u/generate-repo-file-list@main
         with:
           log-level: "INFO"
           directory: "."
