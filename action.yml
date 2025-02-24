@@ -140,18 +140,26 @@ runs:
     - "--color-range"
     - ${{ inputs.color-range-start }}
     - ${{ inputs.color-range-end }}
-    - "--exclude-dark-colors"
-    - ${{ inputs.exclude-dark-colors }}
-    - "--exclude-bright-colors"
-    - ${{ inputs.exclude-bright-colors }}
-    - "--exclude-blacks"
-    - ${{ inputs.exclude-blacks }}
+      ${{# if eq inputs.exclude-dark-colors 'true' }}
+      - "--exclude-dark-colors"
+      - ${{ inputs.exclude-dark-colors }}
+      ${{/ if }}
+      ${{# if eq inputs.exclude-bright-colors 'true' }}
+      - "--exclude-bright-colors"
+      - ${{ inputs.exclude-bright-colors }}
+      ${{/ if }}
+      ${{# if eq inputs.exclude-blacks 'true' }}
+      - "--exclude-blacks"
+      - ${{ inputs.exclude-blacks }}
+      ${{/ if }}
+      ${{# if eq inputs.ensure-readable-colors 'true' }}
+      - "--ensure-readable-colors"
+      - ${{ inputs.ensure-readable-colors }}
+      ${{/ if }}
     - "--max-attempts"
     - ${{ inputs.max-attempts }}
     - "--exclude-blacks-threshold"
     - ${{ inputs.exclude-blacks-threshold }}
-    - "--ensure-readable-colors"
-    - ${{ inputs.ensure-readable-colors }}
     - "--repo-root-header"
     - ${{ inputs.repo-root-header }}
     - "--header-text"
