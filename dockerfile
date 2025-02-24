@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ .
 
-ENTRYPOINT ["python", "generate_file_list.py"]
+ENTRYPOINT ["python", "src/generate_file_list.py"]
