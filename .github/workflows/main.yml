@@ -119,3 +119,5 @@ jobs:
         with:
           commit_message: "Update file list in README.md"
           file_pattern: "README.md file_list.md"
+          repository: ${{ github.repository }}
+          token: ${{ secrets.TOKEN }}
