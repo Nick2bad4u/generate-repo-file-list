@@ -19,6 +19,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: List files in the repository
+        run: |
+          ls -al
+
       - name: Verify README.md exists
         run: |
           if [ ! -f README.md ]; then
