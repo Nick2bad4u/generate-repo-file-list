@@ -33,10 +33,14 @@ inputs:
     description: 'List of colors to use when the color source is set to "list". Provide colors in hex format (e.g., #FF0000).'
     required: false
     default: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
-  color-range:
-    description: "Range of colors (hex codes) for random color generation. Provide two hex codes representing the lower and upper bounds (e.g., --color-range #000000 #FFFFFF)."
+  color-range-start:
+    description: "Start of the range of colors (hex code) for random color generation (e.g., #000000)."
     required: false
-    default: "#000000 #FFFFFF"
+    default: "#000000"
+  color-range-end:
+    description: "End of the range of colors (hex code) for random color generation (e.g., #FFFFFF)."
+    required: false
+    default: "#FFFFFF"
   exclude-dark-colors:
     description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
     required: false
@@ -134,8 +138,8 @@ runs:
     - "--color-list"
     - ${{ inputs.color-list }}
     - "--color-range"
-    - ${{ inputs.color-range.split(' ')[0] }}
-    - ${{ inputs.color-range.split(' ')[1] }}
+    - ${{ inputs.color-range-start }}
+    - ${{ inputs.color-range-end }}
     - "--exclude-dark-colors"
     - ${{ inputs.exclude-dark-colors }}
     - "--exclude-bright-colors"
