@@ -47,6 +47,10 @@ jobs:
 
       - name: Run Generate Repo File List Action
         uses: ./
+        with:
+          log-level: "INFO"
+          directory: "."
+          fallback-repo-url: "https://github.com/${{ github.repository }}"
 
       - name: Update README.md
         uses: actions/github-script@v7
