@@ -19,6 +19,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Verify README.md exists
+        run: |
+          if [ ! -f README.md ]; then
+            echo "README.md not found!"
+            exit 1
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
