@@ -137,9 +137,8 @@ runs:
     - ${{ inputs.color-source }}
     - "--color-list"
     - ${{ inputs.color-list }}
-    - "--color-range-start"
+    - "--color-range"
     - ${{ inputs.color-range-start }}
-    - "--color-range-end"
     - ${{ inputs.color-range-end }}
     - "--max-attempts"
     - ${{ inputs.max-attempts }}
