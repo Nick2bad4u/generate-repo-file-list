@@ -48,7 +48,7 @@ jobs:
       - name: Run Generate Repo File List Action
         uses: nick2bad4u/generate-repo-file-list@main
         with:
-          log-level: "INFO"
+          log-level: "DEBUG"
           directory: "."
           fallback-repo-url: "https://github.com/${{ github.repository }}"
 
