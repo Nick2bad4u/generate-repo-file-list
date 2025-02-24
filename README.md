@@ -6,6 +6,9 @@ This GitHub Action generates an HTML file list for a GitHub repository with link
 
 To use this action, create a workflow file (e.g., `.github/workflows/main.yml`) in your repository with the following content:
 
+Remove the `cron` job if you don't want to run the action daily.
+You can also remoove the `push` and `pull_request` triggers if you only want to run the action manually.
+
 If you don't want to have your `README.md` updated automatically, you can remove the "Commit and push changes" and "Update README.md" steps. You can then use the generated `file_list.md` file to update your `README.md` manually (or for any other purpose).
 
 Inputs are described in the [Inputs](#inputs) section.
