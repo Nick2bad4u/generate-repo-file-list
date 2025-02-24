@@ -48,7 +48,7 @@ jobs:
       - name: Run Generate Repo File List Action
         uses: nick2bad4u/generate-repo-file-list@main
         with:
-          log-level: "DEBUG"
+          log-level: "INFO"
           directory: "."
           repo-url: "https://github.com/${{ github.repository }}"
           fallback-repo-url: "https://github.com/${{ github.repository }}"
@@ -87,6 +87,12 @@ jobs:
             const fileListPath = './file_list.md';
 
             try {
+              // Check if README.md exists, if not create it
+              if (!fs.existsSync(readmePath)) {
+              console.warn('README.md not found. Creating a new README.md file.');
+              fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
+              }
+
               // Read the contents of README.md
               let readmeContent = fs.readFileSync(readmePath, 'utf8');
 

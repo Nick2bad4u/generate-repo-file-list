@@ -167,7 +167,8 @@ def get_git_repo_url():
 # --- Configuration ---
 # Default GitHub repository URL
 # Specifies the default URL of the GitHub repository.
-DEFAULT_GIT_REPO_URL = get_git_repo_url()  # Get the Git repository URL
+# This is only set like this for Github Actions, for running locally use get_git_repo_url()
+DEFAULT_GIT_REPO_URL = FALLBACK_REPO_URL
 
 # Root directory
 # Specifies the root directory of the repository to generate the file list for.
