@@ -134,7 +134,8 @@ runs:
     - "--color-list"
     - ${{ inputs.color-list }}
     - "--color-range"
-    - ${{ inputs.color-range }}
+    - ${{ inputs.color-range.split(' ')[0] }}
+    - ${{ inputs.color-range.split(' ')[1] }}
     - "--exclude-dark-colors"
     - ${{ inputs.exclude-dark-colors }}
     - "--exclude-bright-colors"
