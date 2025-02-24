@@ -1242,22 +1242,22 @@ if __name__ == "__main__":  # Main entry point of the script
     )
     parser.add_argument(  # Add an argument to exclude dark colors
         "--exclude-dark-colors",
-        action="store_true",  # Store True if the argument is provided
-        default=EXCLUDE_DARK_COLORS,  # Set the default value
+        choices=["true", "false"],  # Accept "true" or "false" as values
+        default="true" if EXCLUDE_DARK_COLORS else "false",  # Set the default value based on EXCLUDE_DARK_COLORS
         # Set the help message
         help="\033[1;36mExclude dark colors from being used for file links. Use this option to avoid dark colors.\033[0m",
     )
     parser.add_argument(  # Add an argument to exclude bright colors
         "--exclude-bright-colors",
-        action="store_true",  # Store True if the argument is provided
-        default=EXCLUDE_BRIGHT_COLORS,  # Set the default value
+        choices=["true", "false"],  # Accept "true" or "false" as values
+        default="true" if EXCLUDE_BRIGHT_COLORS else "false",  # Set the default value based on EXCLUDE_BRIGHT_COLORS
         # Set the help message
         help="\033[1;33mExclude bright colors from being used for file links. Use this option to avoid bright colors.\033[0m",
     )
     parser.add_argument(  # Add an argument to exclude black colors
         "--exclude-blacks",
-        action="store_true",  # Store True if the argument is provided
-        default=EXCLUDE_BLACKS,  # Set the default value
+        choices=["true", "false"],  # Accept "true" or "false" as values
+        default="true" if EXCLUDE_BLACKS else "false",  # Set the default value based on EXCLUDE_BLACKS
         # Set the help message
         help="\033[1;32mExclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors.\033[0m",
     )
@@ -1279,8 +1279,8 @@ if __name__ == "__main__":  # Main entry point of the script
     )
     parser.add_argument(  # Add an argument to ensure readable colors
         "--ensure-readable-colors",
-        action="store_true",  # Store True if the argument is provided
-        default=ENSURE_READABLE_COLORS,  # Set the default value
+        choices=["true", "false"],  # Accept "true" or "false" as values
+        default="true" if ENSURE_READABLE_COLORS else "false",  # Set the default value based on ENSURE_READABLE_COLORS
         # Set the help message
         help="\033[1;34mEnsure that the generated colors are readable by maintaining a certain contrast ratio with a white background.\033[0m",
     )
