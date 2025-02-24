@@ -35,7 +35,7 @@ inputs:
   color-range:
     description: "Range of colors (hex codes) for random color generation. Provide two hex codes representing the lower and upper bounds (e.g., --color-range #000000 #FFFFFF)."
     required: false
-    default: "#000000 #FFFFFF"
+    default: "(#000000, #FFFFFF)"
   exclude-dark-colors:
     description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
     required: false
