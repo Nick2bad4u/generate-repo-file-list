@@ -50,6 +50,7 @@ jobs:
         with:
           log-level: "DEBUG"
           directory: "."
+          repo-url: "https://github.com/${{ github.repository }}"
           fallback-repo-url: "https://github.com/${{ github.repository }}"
 
       - name: Update README.md
