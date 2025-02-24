@@ -41,18 +41,6 @@ inputs:
     description: "End of the range of colors (hex code) for random color generation (e.g., #FFFFFF)."
     required: false
     default: "#FFFFFF"
-  exclude-dark-colors:
-    description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
-    required: false
-    default: ""
-  exclude-bright-colors:
-    description: "Exclude bright colors from being used for file links. Use this option to avoid bright colors."
-    required: false
-    default: ""
-  exclude-blacks:
-    description: "Exclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors."
-    required: false
-    default: ""
   max-attempts:
     description: "Maximum number of attempts to generate a valid color. Default is 1000000."
     required: false
@@ -61,10 +49,6 @@ inputs:
     description: "Threshold for excluding black colors. Any color below this threshold on the color chart will be excluded (e.g., #222222)."
     required: false
     default: "#222222"
-  ensure-readable-colors:
-    description: "Ensure that the generated colors are readable by maintaining a certain contrast ratio with a white background."
-    required: false
-    default: ""
   repo-root-header:
     description: 'Header text for files located in the root of the repository. Default is "Repo Root".'
     required: false
