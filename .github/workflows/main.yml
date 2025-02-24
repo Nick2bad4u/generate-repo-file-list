@@ -1,0 +1,109 @@
+name: Generate and Update File List
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *" # Runs once a day at 00:00 UTC
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies (if any)
+        run: |
+          python -m pip install -r requirements.txt
+          # Add any dependencies your script needs here
+          # For example: pip install requests
+
+      - name: Run Generate Repo File List Action
+        uses: ./src
+        with:
+          log-level: "INFO"
+          directory: "."
+          repo-url: "https://github.com/${{ github.repository }}"
+          fallback-repo-url: "https://github.com/author/repo"
+          output-file: "file_list.md"
+          color-source: "random"
+          color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
+          color-range: "#000000 #FFFFFF"
+          exclude-dark-colors: "false"
+          exclude-bright-colors: "false"
+          exclude-blacks: "false"
+          max-attempts: "100"
+          exclude-blacks-threshold: "#222222"
+          ensure-readable-colors: "false"
+          repo-root-header: "Repo Root"
+          header-text: "## File List"
+          intro-text: "# Here is a list of files included in this repository:"
+          dark-color-luminance-threshold: "128"
+          bright-color-luminance-threshold: "200"
+          chunk-size: "40"
+          viewport-mobile: "768"
+          viewport-tablet: "1024"
+          viewport-small-desktop: "1440"
+          root-margin-large-desktop: "0px 0px 400px 0px"
+          root-margin-small-desktop: "0px 0px 300px 0px"
+          root-margin-tablet: "0px 0px 200px 0px"
+          root-margin-mobile: "0px 0px 100px 0px"
+
+      - name: Update README.md
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const readmePath = 'README.md';
+            const fileListPath = 'file_list.md';
+
+            try {
+              // Read the contents of README.md
+              let readmeContent = fs.readFileSync(readmePath, 'utf8');
+
+              // Read the contents of file_list.md
+              const fileListContent = fs.readFileSync(fileListPath, 'utf8');
+
+              // Define start and end markers for the file list section
+              const startMarker = '<!-- FILE_LIST_START -->';
+              const endMarker = '<!-- FILE_LIST_END -->';
+
+              // Find the start and end positions of the file list section
+              const startPosition = readmeContent.indexOf(startMarker);
+              const endPosition = readmeContent.indexOf(endMarker);
+
+              // Check if the markers exist in the README.md file
+              if (startPosition === -1 || endPosition === -1) {
+                console.warn('Start or end markers not found in README.md.  The action will add the markers with the file list to the end of the file.');
+                readmeContent += `\n${startMarker}\n${fileListContent}\n${endMarker}\n`;
+              } else {
+                // Replace the existing file list with the new content
+                readmeContent = readmeContent.substring(0, startPosition + startMarker.length) +
+                  '\n' + fileListContent + '\n' +
+                  readmeContent.substring(endPosition);
+              }
+
+              // Write the updated content back to README.md
+              fs.writeFileSync(readmePath, readmeContent);
+              console.log('Successfully updated README.md');
+            } catch (error) {
+              console.error('Failed to update README.md:', error);
+            }
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update file list in README.md"
+          file_pattern: "README.md file_list.md"
