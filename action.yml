@@ -49,6 +49,22 @@ inputs:
     description: "Threshold for excluding black colors. Any color below this threshold on the color chart will be excluded (e.g., #222222)."
     required: false
     default: "#222222"
+  exclude-dark-colors:
+    description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
+    required: false
+    default: "false"
+  exclude-bright-colors:
+    description: "Exclude bright colors from being used for file links. Use this option to avoid bright colors."
+    required: false
+    default: "false"
+  exclude-blacks:
+    description: "Exclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors."
+    required: false
+    default: "false"
+  ensure-readable-colors:
+    description: "Ensure that the generated colors are readable by maintaining a certain contrast ratio with a white background."
+    required: false
+    default: "false"
   repo-root-header:
     description: 'Header text for files located in the root of the repository. Default is "Repo Root".'
     required: false
