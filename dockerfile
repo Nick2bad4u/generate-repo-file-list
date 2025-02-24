@@ -1,8 +1,5 @@
 FROM python:3.9-slim
 
-# Install git
-RUN apt-get update && apt-get install -y git
-
 WORKDIR /app
 
 COPY requirements.txt .
