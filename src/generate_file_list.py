@@ -130,7 +130,7 @@ def get_git_repo_url():
                 f"\033[1;31mError running Git command: {e}\033[0m",
                 exc_info=True,
             )
-            url = ""  # Set the URL to an empty string
+            return FALLBACK_REPO_URL  # Return the fallback URL if an error occurs
 
         if not url:  # Check if the URL is empty
             raise subprocess.CalledProcessError(  # Raise an error if the URL is empty
@@ -167,7 +167,7 @@ def get_git_repo_url():
 # --- Configuration ---
 # Default GitHub repository URL
 # Specifies the default URL of the GitHub repository.
-DEFAULT_GIT_REPO_URL = FALLBACK_REPO_URL  # Get the Git repository URL
+DEFAULT_GIT_REPO_URL = get_git_repo_url()  # Get the Git repository URL
 
 # Root directory
 # Specifies the root directory of the repository to generate the file list for.
@@ -192,7 +192,7 @@ DEFAULT_OUTPUT_FORMAT = "markdown"
 
 # Output file name
 # Specifies the default name of the output file based on the format.
-DEFAULT_OUTPUT_FILE = "file_list.md" if DEFAULT_OUTPUT_FORMAT == "markdown" else "file_list.html"
+DEFAULT_OUTPUT_FILE = "file_list.md"
 
 # Color source
 # Specifies the source of the colors used for the links.
@@ -808,6 +808,7 @@ def is_black_color(
         logging.error(f"\033[1;31mError in is_black_color function: {e}\033[0m")
         return False
 
+
 def generate_file_list_with_links(
     file_list,
     repo_url,
@@ -1171,7 +1172,7 @@ if __name__ == "__main__":  # Main entry point of the script
     parser.add_argument(
         "--output-format",
         choices=["html", "markdown"],
-        default="html",
+        default=DEFAULT_OUTPUT_FORMAT,
         help="\033[1;32mOutput format for the file list. Choose 'html' for HTML format or 'markdown' for Markdown format. Default is 'html'.\033[0m",
     )
     parser.add_argument(  # Add an argument for the log level
@@ -1512,6 +1513,9 @@ if __name__ == "__main__":  # Main entry point of the script
     )  # Log the overwrite file categories argument
     logging.info(f"\033[1;32mIGNORE_LIST is set to:\033[0m {IGNORE_LIST}")  # Log the ignore list
     logging.info(
+        f"\033[1;32mDEFAULT_OUTPUT_FORMAT is set to:\033[0m {args.output_format}"
+    )  # Log the default output format
+    logging.info(
         f"\033[1;32mOVERWRITE_IGNORE_LIST is set to:\033[0m {args.overwrite_ignore_list}"
     )  # Log the overwrite ignore list argument
     logging.info(f"\033[1;94mLOG_LEVEL is set to:\033[0m {args.log_level}")  # Log the log level
@@ -1585,6 +1589,9 @@ if __name__ == "__main__":  # Main entry point of the script
         # Log the root margin for mobile devices
         f"\033[1;34mROOT_MARGIN_MOBILE is set to:\033[0m {args.root_margin_mobile}"
     )
+
+    if DEFAULT_OUTPUT_FORMAT == "html":  # Check if the output format is HTML
+        args.output_file = args.output_file.replace(".md", ".html")  # Replace .md with .html
 
     file_list = generate_file_list(args.directory, IGNORE_LIST)  # Generate the file list
     file_list_html = generate_file_list_with_links(  # Generate the file list with links
