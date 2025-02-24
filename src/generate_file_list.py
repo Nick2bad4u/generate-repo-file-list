@@ -86,7 +86,6 @@ Main entry point:
 
 import argparse
 import logging
-import math
 import os
 import random
 import subprocess
