@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -67,8 +67,8 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const readmePath = 'README.md';
-            const fileListPath = 'file_list.md';
+            const readmePath = './README.md';
+            const fileListPath = './file_list.md';
 
             try {
               // Read the contents of README.md
