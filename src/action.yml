@@ -9,13 +9,10 @@ inputs:
     description: "Root directory of the repository to generate the file list for. Default is the current directory."
     required: false
     default: "."
-  repo-url:
-    description: "GitHub repository URL to use for generating file links. Default is determined by the Git configuration."
-    required: false
   fallback-repo-url:
     description: "Fallback GitHub repository URL to use if the default URL cannot be determined."
     required: false
-    default: "https://github.com/author/repo"
+    default: "https://github.com/${{ github.repository }}"
   output-format:
     description: 'File Format to be output in, if using for readme.md via github use MD, for readme.md on web use html".'
     required: false
