@@ -170,13 +170,7 @@ runs:
     - ${{ inputs.root-margin-tablet }}
     - "--root-margin-mobile"
     - ${{ inputs.root-margin-mobile }}
-
-    #Fix these
-    # - "--exclude-dark-colors"
-    # - ${{ inputs.exclude-dark-colors }}
-    # - "--exclude-bright-colors"
-    # - ${{ inputs.exclude-bright-colors }}
-    # - "--exclude-blacks"
-    # - ${{ inputs.exclude-blacks }}
-    # - "--ensure-readable-colors"
-    # - ${{ inputs.ensure-readable-colors }}
+    - ${{ inputs.exclude-dark-colors == 'true' && '--exclude-dark-colors' || '' }}
+    - ${{ inputs.exclude-bright-colors == 'true' && '--exclude-bright-colors' || '' }}
+    - ${{ inputs.exclude-blacks == 'true' && '--exclude-blacks' || '' }}
+    - ${{ inputs.ensure-readable-colors == 'true' && '--ensure-readable-colors' || '' }}
