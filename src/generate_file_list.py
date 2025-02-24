@@ -158,7 +158,7 @@ def get_git_repo_url():
         return FALLBACK_REPO_URL  # Return the fallback URL if an error occurs
     except Exception as e:  # Handle any other exceptions
         logging.error(
-            f"\033[1;31mUnexpected error: {e}\033[0m",
+            f"\033[1;31mUnexpected error: {e} (If you're seeing this on GitHub Actions, it may be normal.)\033[0m",
             exc_info=True,  # Log the error
         )
         return FALLBACK_REPO_URL  # Return the fallback URL if an error occurs
