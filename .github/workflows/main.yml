@@ -46,7 +46,7 @@ jobs:
           # For example: pip install requests
 
       - name: Run Generate Repo File List Action
-        uses: /
+        uses: dockerfile
         with:
           log-level: "INFO"
           directory: "."
