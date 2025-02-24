@@ -1,5 +1,8 @@
 name: "Generate Repo File List"
 description: "Generates an HTML file list for a GitHub repository with links to each file."
+branding:
+  icon: 'activity'
+  color: 'purple'
 inputs:
   log-level:
     description: "Set the logging level setting manually instead of pulling from environment"
