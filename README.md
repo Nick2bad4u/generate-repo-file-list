@@ -18,7 +18,7 @@ Example of HTML file list: [HTML File List Example](example-of-the-generated-fil
 Example of Markdown file list: [Markdown File List Example](#example-of-the-generated-file-list-in-markdown-format-without-codeblock)
 
 ```yaml
-name: Generate and Update File List
+name: Generate and Update README.MD File List
 
 on:
   push:
@@ -58,6 +58,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      - name: Create src directory
+        run: mkdir -p src
+
+      - name: Download generate_file_list.py
+        run: |
+          curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
+          chmod +x src/generate_file_list.py
 
       - name: Install dependencies (if any)
         run: |
@@ -153,6 +161,7 @@ jobs:
           commit_user_name: "{{ github.actor }}"
           commit_user_email: "{{ github.actor }}@users.noreply.github.com"
           commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
+
 
 ```
 

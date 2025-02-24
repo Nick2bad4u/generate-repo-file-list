@@ -1,4 +1,4 @@
-name: Generate and Update File List
+name: Generate and Update README.MD File List
 
 on:
   push:
