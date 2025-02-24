@@ -106,31 +106,8 @@ jobs:
             try {
               // Check if README.md exists, if not create it
               if (!fs.existsSync(readmePath)) {
-<<<<<<< HEAD
               console.warn('README.md not found. Creating a new README.md file.');
               fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
-=======
-                console.warn('README.md not found. Creating a new README.md file.');
-                fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->
-# ## File List
-
-# Here is a list of files included in this repository:
-
-## Repo Root
-- [.gitignore](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.gitignore)
-- [dockerfile](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/dockerfile)
-- [file_list.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.html)
-- [readme.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/readme.html)
-- [README.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/README.md)
-- [file_list.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.md)
-- [requirements.txt](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/requirements.txt)
-## YAML
-- [.github/workflows/main.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.github/workflows/main.yml)
-- [action.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/action.yml)
-## src
-- [src/generate_file_list.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/src/generate_file_list.py)
-<!-- FILE_LIST_END -->\n');
->>>>>>> 94d2ad78bc775899675344617fc9f04da16403a7
               }
 
               // Read the contents of README.md
