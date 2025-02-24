@@ -25,7 +25,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *' # Runs once a day at 00:00 UTC
+    - cron: "0 0 * * *" # Runs once a day at 00:00 UTC
   workflow_dispatch: # Allows manual triggering
 
 permissions:
@@ -54,7 +54,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install dependencies (if any)
         run: |
@@ -63,37 +63,37 @@ jobs:
           # For example: pip install requests
 
       - name: Run Generate Repo File List Action
-        uses: ./ # Use the local action
+        uses: nick2bad4u/generate-repo-file-list@main
         with:
-          log-level: 'INFO'
-          directory: '.'
-          repo-url: 'https://github.com/${{ github.repository }}'
-          fallback-repo-url: 'https://github.com/${{ github.repository }}'
-          output-format: 'markdown'
-          output-file: 'file_list.md'
-          color-source: 'random'
-          color-list: '#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF'
-          color-range-start: '#000000'
-          color-range-end: '#FFFFFF'
-          max-attempts: '1000000'
-          exclude-blacks-threshold: '#222222'
-          exclude-dark-colors: 'false'
-          exclude-bright-colors: 'false'
-          exclude-blacks: 'false'
-          ensure-readable-colors: 'false'
-          repo-root-header: 'Repo Root'
-          header-text: '## File List'
-          intro-text: '# Here is a list of files included in this repository:'
-          dark-color-luminance-threshold: '128'
-          bright-color-luminance-threshold: '200'
-          chunk-size: '40'
-          viewport-mobile: '768'
-          viewport-tablet: '1024'
-          viewport-small-desktop: '1440'
-          root-margin-large-desktop: '0px 0px 400px 0px'
-          root-margin-small-desktop: '0px 0px 300px 0px'
-          root-margin-tablet: '0px 0px 200px 0px'
-          root-margin-mobile: '0px 0px 100px 0px'
+          log-level: "INFO"
+          directory: "."
+          repo-url: "https://github.com/${{ github.repository }}"
+          fallback-repo-url: "https://github.com/${{ github.repository }}"
+          output-format: "markdown"
+          output-file: "file_list.md"
+          color-source: "random"
+          color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
+          color-range-start: "#000000"
+          color-range-end: "#FFFFFF"
+          max-attempts: "1000000"
+          exclude-blacks-threshold: "#222222"
+          exclude-dark-colors: "false"
+          exclude-bright-colors: "false"
+          exclude-blacks: "false"
+          ensure-readable-colors: "false"
+          repo-root-header: "Repo Root"
+          header-text: "## File List"
+          intro-text: "# Here is a list of files included in this repository:"
+          dark-color-luminance-threshold: "128"
+          bright-color-luminance-threshold: "200"
+          chunk-size: "40"
+          viewport-mobile: "768"
+          viewport-tablet: "1024"
+          viewport-small-desktop: "1440"
+          root-margin-large-desktop: "0px 0px 400px 0px"
+          root-margin-small-desktop: "0px 0px 300px 0px"
+          root-margin-tablet: "0px 0px 200px 0px"
+          root-margin-mobile: "0px 0px 100px 0px"
 
       - name: Update README.md
         uses: actions/github-script@v7
@@ -106,8 +106,8 @@ jobs:
             try {
               // Check if README.md exists, if not create it
               if (!fs.existsSync(readmePath)) {
-                console.warn('README.md not found. Creating a new README.md file.');
-                fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
+              console.warn('README.md not found. Creating a new README.md file.');
+              fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
               }
 
               // Read the contents of README.md
@@ -126,7 +126,7 @@ jobs:
 
               // Check if the markers exist in the README.md file
               if (startPosition === -1 || endPosition === -1) {
-                console.warn('Start or end markers not found in README.md. The action will add the markers with the file list to the end of the file.');
+                console.warn('Start or end markers not found in README.md.  The action will add the markers with the file list to the end of the file.');
                 readmeContent += `\n${startMarker}\n${fileListContent}\n${endMarker}\n`;
               } else {
                 // Replace the existing file list with the new content
@@ -145,8 +145,12 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'Update file list in README.md'
-          file_pattern: 'README.md file_list.md'
+          commit_message: "Update file list in README.md automatically with GitHub Action"
+          file_pattern: "README.md file_list.md"
+          commit_user_name: "{{ github.actor }}"
+          commit_user_email: "{{ github.actor }}@users.noreply.github.com"
+          commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
+
 ```
 
 ### Inputs
