@@ -48,7 +48,7 @@ jobs:
       - name: Run Generate Repo File List Action
         uses: ./
         with:
-          log-level: "INFO"
+          --log-level: "INFO"
           directory: "."
           repo-url: "https://github.com/${{ github.repository }}"
           fallback-repo-url: "https://github.com/author/repo"
