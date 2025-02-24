@@ -186,9 +186,14 @@ IGNORE_LIST = [
     "zwiftbikes",
 ]
 
+# Output format
+# Specifies the format of the output file.
+# Options: "markdown", "html"
+DEFAULT_OUTPUT_FORMAT = "markdown"
+
 # Output file name
-# Specifies the default name of the output HTML file.
-DEFAULT_OUTPUT_FILE = "file_list.html"
+# Specifies the default name of the output file based on the format.
+DEFAULT_OUTPUT_FILE = "file_list.md" if DEFAULT_OUTPUT_FORMAT == "markdown" else "file_list.html"
 
 # Color source
 # Specifies the source of the colors used for the links.
@@ -294,7 +299,6 @@ EXCLUDE_BLACKS_THRESHOLD = "#222222"
 MAX_ATTEMPTS = 1000000
 # If set to True, ensures that the generated colors are readable by maintaining a certain contrast ratio with a white background.
 ENSURE_READABLE_COLORS = False
-
 
 # Log Level Setting for the logger, defaults to INFO.
 # Choices: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
@@ -805,15 +809,15 @@ def is_black_color(
         logging.error(f"\033[1;31mError in is_black_color function: {e}\033[0m")
         return False
 
-
 def generate_file_list_with_links(
     file_list,
     repo_url,
     color_source=DEFAULT_COLOR_SOURCE,
     color_range=DEFAULT_COLOR_RANGE,
     color_list=DEFAULT_COLOR_LIST,
+    output_format=DEFAULT_OUTPUT_FORMAT,
 ):
-    """Generates an HTML list of files with links to a repository, categorized by file type and folder.
+    """Generates a list of files with links to a repository, categorized by file type and folder.
 
     Args:
       file_list (list): A list of file paths relative to the repository root.
@@ -824,21 +828,21 @@ def generate_file_list_with_links(
       color_range (tuple, optional): A tuple specifying the range of the random color. Defaults to None.
       color_list (list, optional): A list of colors to choose from when color_source is "list".
         Defaults to DEFAULT_COLOR_LIST.
+      output_format (str, optional): The output format for the file list. Can be "html" or "markdown". Defaults to "html".
 
     Returns:
-      str: An HTML string containing an unordered list of files, with links to the repository.
-         The list is categorized by file type (e.g., CSS, JS) and folder.
-         Returns an empty string if an error occurs during HTML generation.
+      str: A string containing the file list in the specified format.
+         Returns an empty string if an error occurs during generation.
 
     Raises:
       OSError: If there is an operating system error.
       ValueError: If there is a value error.
       KeyError: If there is a key error.
-      Exception: If there is an error generating sorted HTML.
+      Exception: If there is an error generating the file list.
 
     Notes:
       - The function uses a default color list if `color_list` is not provided.
-      - The function logs the number of HTML links generated and any errors encountered.
+      - The function logs the number of links generated and any errors encountered.
       - The function encodes the URL to handle special characters.
       - The function sorts files within each category and folder by extension.
       - The function uses global constants such as `FILE_CATEGORIES`, `DEFAULT_COLOR_LIST`, `REPO_ROOT_HEADER`, and `LOG_LEVEL`.
@@ -865,47 +869,78 @@ def generate_file_list_with_links(
 
             for category in FILE_CATEGORIES:  # Iterate over the file categories
                 if file.endswith(category["ext"]):  # Check if the file ends with the category extension
-                    category["files"].append(
-                        f'<li><a href="{file_url}" style="color: {color};">{file.replace(os.sep, "/")}</a></li>'
-                    )  # Add the file to the category  # Create the HTML link
+                    if output_format == "html":
+                        category["files"].append(
+                            f'<li><a href="{file_url}" style="color: {color};">{file.replace(os.sep, "/")}</a></li>'
+                        )  # Add the file to the category  # Create the HTML link
+                    else:  # Markdown format
+                        category["files"].append(
+                            f'- [{file.replace(os.sep, "/")}]({file_url})'
+                        )  # Add the file to the category  # Create the Markdown link
                     break  # Break out of the loop
             else:  # If the file does not belong to any category
                 folder = os.path.dirname(file)  # Get the folder name
-                file_list_html[folder].append(
-                    f'<li><a href="{file_url}" style="color: {color};">{file.replace(os.sep, "/")}</a></li>'
-                )  # Add the file to the folder  # Create the HTML link
+                if output_format == "html":
+                    file_list_html[folder].append(
+                        f'<li><a href="{file_url}" style="color: {color};">{file.replace(os.sep, "/")}</a></li>'
+                    )  # Add the file to the folder  # Create the HTML link
+                else:  # Markdown format
+                    file_list_html[folder].append(
+                        f'- [{file.replace(os.sep, "/")}]({file_url})'
+                    )  # Add the file to the folder  # Create the Markdown link
 
-        logging.log(  # Log the number of HTML links generated
+        logging.log(  # Log the number of links generated
             getattr(logging, LOG_LEVEL_SETTING),
-            f"\033[1;32mGenerated HTML links for {len(file_list)} files.\033[0m",
+            f"\033[1;32mGenerated links for {len(file_list)} files.\033[0m",
         )
     except (OSError, ValueError, KeyError) as e:  # Handle errors
-        logging.error(f"\033[1;31mError generating HTML links: {type(e).__name__}: {e}\033[0m")  # Log the error
+        logging.error(f"\033[1;31mError generating links: {type(e).__name__}: {e}\033[0m")  # Log the error
 
-    try:  # Try to generate the sorted HTML
-        sorted_html = []  # Initialize a list to store the sorted HTML
+    try:  # Try to generate the sorted file list
+        sorted_list = []  # Initialize a list to store the sorted file list
 
         root_files = []  # Initialize a list to store the root files
         if "" in file_list_html:  # Check if there are files in the root directory
             root_files = file_list_html.pop("")  # Get the root files
 
         if root_files:  # Check if there are root files
-            sorted_html.append(f"<li><h2>{REPO_ROOT_HEADER}</h2></li>")  # Add the root header
-            sorted_html.extend(sorted(root_files, key=lambda x: os.path.splitext(x)[1]))  # Add the sorted root files
+            if output_format == "html":
+                sorted_list.append(f"<li><h2>{REPO_ROOT_HEADER}</h2></li>")  # Add the root header
+                sorted_list.extend(
+                    sorted(root_files, key=lambda x: os.path.splitext(x)[1])
+                )  # Add the sorted root files
+            else:  # Markdown format
+                sorted_list.append(f"## {REPO_ROOT_HEADER}")  # Add the root header
+                sorted_list.extend(
+                    sorted(root_files, key=lambda x: os.path.splitext(x)[1])
+                )  # Add the sorted root files
 
         for category in FILE_CATEGORIES:  # Iterate over the file categories
             if category["files"]:  # Check if the category has files
-                sorted_html.append(f'<li><h2>{category["name"]}</h2></li>')  # Add the category header
-                sorted_html.extend(sorted(category["files"]))  # Add the sorted category files
+                if output_format == "html":
+                    sorted_list.append(f'<li><h2>{category["name"]}</h2></li>')  # Add the category header
+                    sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
+                else:  # Markdown format
+                    sorted_list.append(f"## {category['name']}")  # Add the category header
+                    sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
 
         for folder in sorted(file_list_html):  # Iterate over the folders
-            sorted_html.append(f"<li><h2>{folder}</h2></li>")  # Add the folder header
-            sorted_html.extend(sort_files_by_extension(file_list_html[folder]))  # Add the sorted files in the folder
+            if output_format == "html":
+                sorted_list.append(f"<li><h2>{folder}</h2></li>")  # Add the folder header
+                sorted_list.extend(
+                    sort_files_by_extension(file_list_html[folder])
+                )  # Add the sorted files in the folder
+            else:  # Markdown format
+                sorted_list.append(f"## {folder}")  # Add the folder header
+                sorted_list.extend(
+                    sort_files_by_extension(file_list_html[folder])
+                )  # Add the sorted files in the folder
 
-        sorted_html.append("</ul>")  # Add the closing tag
-        return "\n".join(sorted_html)  # Return the HTML
+        if output_format == "html":
+            sorted_list.append("</ul>")  # Add the closing tag
+        return "\n".join(sorted_list)  # Return the file list
     except Exception as e:  # Handle errors
-        logging.error(f"\033[1;31mError generating sorted HTML: {e}\033[0m")  # Log the error
+        logging.error(f"\033[1;31mError generating sorted file list: {e}\033[0m")  # Log the error
         return ""  # Return an empty string
 
 
@@ -926,15 +961,16 @@ def sort_files_by_extension(files):  # Sort files by their extensions
         return files  # Return the original list of files
 
 
-def save_file_list(file_list_html, output_file):  # Save the file list to an output file
-    """Saves the generated file list HTML content to an output file.
+def save_file_list(file_list_content, output_file, output_format=DEFAULT_OUTPUT_FORMAT):
+    """Saves the generated file list content to an output file.
 
-    The function processes the HTML content, splits it into chunks, and writes it to the specified output file.
-    It includes HTML headers, placeholders for lazy loading, and a script to handle the lazy loading.
+    The function processes the content, splits it into chunks (if HTML), and writes it to the specified output file.
+    It includes headers, placeholders for lazy loading (if HTML), and a script to handle the lazy loading (if HTML).
 
     Args:
-      file_list_html (str): The HTML content representing the file list.
-      output_file (str): The path to the output file where the HTML content will be saved.
+      file_list_content (str): The content representing the file list.
+      output_file (str): The path to the output file where the content will be saved.
+      output_format (str, optional): The output format for the file list. Can be "html" or "markdown". Defaults to "html".
 
     Raises:
       IOError: If there is an error writing to the output file.
@@ -942,18 +978,27 @@ def save_file_list(file_list_html, output_file):  # Save the file list to an out
       Exception: If there is an error processing the file list.
     """
     try:
-        file_list_html = "\n".join(line.replace("\\", "/") for line in file_list_html.splitlines())
-        file_list_chunks = split_into_chunks(file_list_html, CHUNK_SIZE)
+        if output_format == "html":
+            file_list_content = "\n".join(line.replace("\\", "/") for line in file_list_content.splitlines())
+            file_list_chunks = split_into_chunks(file_list_content, CHUNK_SIZE)
+        else:
+            file_list_chunks = [file_list_content]
+
     except Exception as e:
         logging.error(f"\033[1;31mError processing file list: {e}\033[0m")
         return
 
     try:
         with open(output_file, "w", encoding="utf-8") as f:
-            write_html_header(f)
-            # Write placeholders for lazy loading the file list chunks
-            write_lazyload_placeholders(f, file_list_chunks)
-            write_lazyload_script(f, file_list_chunks)
+            if output_format == "html":
+                write_html_header(f)
+                # Write placeholders for lazy loading the file list chunks
+                write_lazyload_placeholders(f, file_list_chunks)
+                write_lazyload_script(f, file_list_chunks)
+            else:
+                f.write(f"# {HEADER_TEXT}\n\n")  # Write the header text to the file
+                f.write(f"{INTRO_TEXT}\n\n")  # Write the intro text to the file
+                f.write(file_list_content)  # Write the file list content to the file
         logging.log(
             getattr(logging, LOG_LEVEL_SETTING),
             f"\033[1;32mFile list saved to {output_file}\033[0m",
@@ -1123,6 +1168,12 @@ if __name__ == "__main__":  # Main entry point of the script
     parser = argparse.ArgumentParser(  # Create an argument parser
         # Set the description for the parser
         description="Generate a file list for a GitHub repository with HTML links."
+    )
+    parser.add_argument(
+        "--output-format",
+        choices=["html", "markdown"],
+        default="html",
+        help="\033[1;32mOutput format for the file list. Choose 'html' for HTML format or 'markdown' for Markdown format. Default is 'html'.\033[0m",
     )
     parser.add_argument(  # Add an argument for the log level
         "--log-level",
@@ -1414,9 +1465,9 @@ if __name__ == "__main__":  # Main entry point of the script
     LOG_LEVEL_SETTING = args.log_level.upper()  # Set the log level
     ROOT_DIRECTORY = args.directory  # Set the root directory
     DEFAULT_GIT_REPO_URL = args.repo_url  # Set the default Git repository URL
-    # Set the fallback Git repository URL
-    FALLBACK_REPO_URL = args.fallback_repo_url
+    FALLBACK_REPO_URL = args.fallback_repo_url  # Set the fallback Git repository URL
     DEFAULT_OUTPUT_FILE = args.output_file  # Set the default output file
+    DEFAULT_OUTPUT_FORMAT = args.output_format  # Set the default output format
     DEFAULT_COLOR_SOURCE = args.color_source  # Set the default color source
     DEFAULT_COLOR_RANGE = args.color_range  # Set the default color range sorted from lowest to highest
     EXCLUDE_DARK_COLORS = args.exclude_dark_colors  # Set the exclusion of dark colors
@@ -1543,6 +1594,7 @@ if __name__ == "__main__":  # Main entry point of the script
         args.color_source,  # The color source for the links
         args.color_range,  # The color range for random colors
         args.color_list,  # The list of colors
+        args.output_format,  # The output format (html or markdown)
     )
 
     save_file_list(file_list_html, args.output_file)  # Save the file list to an HTML file

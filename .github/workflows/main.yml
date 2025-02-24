@@ -37,6 +37,7 @@ jobs:
           directory: "."
           repo-url: "https://github.com/${{ github.repository }}"
           fallback-repo-url: "https://github.com/author/repo"
+          output-format: "markdown"
           output-file: "file_list.md"
           color-source: "random"
           color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
