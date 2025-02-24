@@ -39,6 +39,14 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Create src directory
+        run: mkdir -p src
+
+      - name: Download generate_file_list.py
+        run: |
+          curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
+          chmod +x src/generate_file_list.py
+
       - name: Install dependencies (if any)
         run: |
           python -m pip install -r requirements.txt
