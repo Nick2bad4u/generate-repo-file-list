@@ -44,15 +44,15 @@ inputs:
   exclude-dark-colors:
     description: "Exclude dark colors from being used for file links. Use this option to avoid dark colors."
     required: false
-    default: "false"
+    default: "False"
   exclude-bright-colors:
     description: "Exclude bright colors from being used for file links. Use this option to avoid bright colors."
     required: false
-    default: "false"
+    default: "False"
   exclude-blacks:
     description: "Exclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors."
     required: false
-    default: "false"
+    default: "False"
   max-attempts:
     description: "Maximum number of attempts to generate a valid color. Default is 1000000."
     required: false
@@ -64,7 +64,7 @@ inputs:
   ensure-readable-colors:
     description: "Ensure that the generated colors are readable by maintaining a certain contrast ratio with a white background."
     required: false
-    default: "false"
+    default: "False"
   repo-root-header:
     description: 'Header text for files located in the root of the repository. Default is "Repo Root".'
     required: false
