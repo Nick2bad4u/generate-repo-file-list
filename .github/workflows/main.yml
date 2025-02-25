@@ -89,8 +89,6 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const readmePath = './README.md';
-            const fs = require('fs');
                  const readmePath = './README.md';
                  let fileListPath = './file_list.md';
                  const fileListHTMLPath = './file_list.html';

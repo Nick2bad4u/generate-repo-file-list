@@ -111,8 +111,6 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const readmePath = './README.md';
-            const fs = require('fs');
                  const readmePath = './README.md';
                  let fileListPath = './file_list.md';
                  const fileListHTMLPath = './file_list.html';
@@ -183,8 +181,6 @@ jobs:
           commit_user_name: "{{ github.actor }}"
           commit_user_email: "{{ github.actor }}@users.noreply.github.com"
           commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
-
-
 
 ```
 
