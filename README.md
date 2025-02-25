@@ -69,6 +69,11 @@ jobs:
           curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
           chmod +x src/generate_file_list.py
 
+      - name: Download requirements.txt
+        run: |
+          curl -L -o requirements.txt https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/requirements.txt
+          chmod +x requirements.txt
+
       - name: Install dependencies (if any)
         run: |
           python -m pip install -r requirements.txt
@@ -163,7 +168,6 @@ jobs:
           commit_user_name: "{{ github.actor }}"
           commit_user_email: "{{ github.actor }}@users.noreply.github.com"
           commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
-
 
 ```
 
