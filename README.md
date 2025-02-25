@@ -6,6 +6,8 @@ This GitHub Action generates an HTML file list for a GitHub repository with link
 
 To use this action, create a workflow file (e.g., `.github/workflows/main.yml`) in your repository with the following content:
 
+Place `2` file markers in your README.md: `<!-- FILE_LIST_START -->` and `<!-- FILE_LIST_END -->` - the file list will be automatically added between these 2 points in your `README.md`
+
 Remove the `cron` job if you don't want to run the action daily.
 You can also remoove the `push` and `pull_request` triggers if you only want to run the action manually.
 
