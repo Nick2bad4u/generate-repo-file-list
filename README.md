@@ -29,8 +29,6 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: "0 0 * * *" # Runs once a day at 00:00 UTC
   workflow_dispatch: # Allows manual triggering
 
 permissions:
@@ -87,8 +85,8 @@ jobs:
           directory: "."
           repo-url: "https://github.com/${{ github.repository }}"
           fallback-repo-url: "https://github.com/${{ github.repository }}"
-          output-format: "markdown"
-          output-file: "file_list.md"
+          output-format: "html"
+          output-file: "file_list.html"
           color-source: "random"
           color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
           color-range-start: "#000000"
@@ -164,10 +162,11 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update file list in README.md automatically with GitHub Action"
-          file_pattern: "README.md file_list.md"
+          file_pattern: "README.md file_list.md file_list.html"
           commit_user_name: "{{ github.actor }}"
           commit_user_email: "{{ github.actor }}@users.noreply.github.com"
           commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
+
 
 ```
 
