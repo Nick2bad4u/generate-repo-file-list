@@ -931,7 +931,8 @@ def generate_file_list_with_links(
 
         for folder in sorted(file_list_html):  # Iterate over the folders
             if output_format == "html":
-                sorted_list.append(f'<h2 style="color: {color};">{folder}</h2>')  # Add the folder header with color
+                folder_color = get_random_color(color_range)  # Generate a random color for the folder header
+                sorted_list.append(f'<h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
                 sorted_list.extend(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
