@@ -1,18 +1,129 @@
-# ## File List
+<h1>## File List</h1>
 
-# Here is a list of files included in this repository:
+<p># Here is a list of files included in this repository:</p>
 
-<li><h2>Repo Root</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.gitignore" style="color: #44ed0b;">.gitignore</a></li>
-<li><a href="https://github.com/author/repo/blob/main/README.md" style="color: #a38c7a;">README.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/dockerfile" style="color: #31e38c;">dockerfile</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.html" style="color: #38ccce;">file_list.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.md" style="color: #24ef06;">file_list.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/readme.html" style="color: #40f616;">readme.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/requirements.txt" style="color: #9eb57c;">requirements.txt</a></li>
-<li><h2>YAML</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.github/workflows/main.yml" style="color: #c39504;">.github/workflows/main.yml</a></li>
-<li><a href="https://github.com/author/repo/blob/main/action.yml" style="color: #b689b8;">action.yml</a></li>
-<li><h2>src</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/src/generate_file_list.py" style="color: #f8b688;">src/generate_file_list.py</a></li>
-</ul>
+<div class="lazyload-placeholder" data-content="file-list-1" style="min-height: 400px;"></div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const lazyLoadElements = document.querySelectorAll('.lazyload-placeholder');
+
+    if ("IntersectionObserver" in window) {
+        let rootMargin = '0px 0px 400px 0px';
+        let threshold = 0.5;
+        if (window.innerWidth <= 768) {  // Mobile devices
+            rootMargin = '0px 0px 100px 0px';
+            threshold = 0.1;
+        } else if (window.innerWidth <= 1024) {  // Tablets
+            rootMargin = '0px 0px 200px 0px';
+            threshold = 0.3;
+        } else if (window.innerWidth <= 1440) {  // Small desktops
+            rootMargin = '0px 0px 300px 0px';
+            threshold = 0.4;
+        } else {  // Large desktops
+            rootMargin = '0px 0px 400px 0px';
+            threshold = 0.5;
+        }
+        let observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let placeholder = entry.target;
+                    let contentId = placeholder.dataset.content;
+                    let file_list_html = '';
+                    switch(contentId) {
+                        case 'file-list-1':
+                            file_list_html = `<ul><h2>Repo Root</h2>
+<li><a href="https://github.com/author/repo/blob/main/.gitignore" style="color: #61d9b6;">.gitignore</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.jsbeautifyrc" style="color: #35c806;">.jsbeautifyrc</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.pre-commit-config.yaml" style="color: #a59ed6;">.pre-commit-config.yaml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.prettierrc" style="color: #bcad64;">.prettierrc</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.stylelintrc.json" style="color: #41a876;">.stylelintrc.json</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.vale.ini" style="color: #b07f53;">.vale.ini</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.yamllint" style="color: #4bd9d0;">.yamllint</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CNAME" style="color: #32ced0;">CNAME</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CODE_OF_CONDUCT.md" style="color: #857f97;">CODE_OF_CONDUCT.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CONTRIBUTING.md" style="color: #da6f9e;">CONTRIBUTING.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/README.md" style="color: #d8c85f;">README.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/dockerfile" style="color: #f0b79c;">dockerfile</a></li>
+<li><a href="https://github.com/author/repo/blob/main/favicon.ico" style="color: #c3c695;">favicon.ico</a></li>
+<li><a href="https://github.com/author/repo/blob/main/file_list.html" style="color: #c29a35;">file_list.html</a></li>
+<li><a href="https://github.com/author/repo/blob/main/file_list.md" style="color: #c176dc;">file_list.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/readme.html" style="color: #7bab26;">readme.html</a></li>
+<li><a href="https://github.com/author/repo/blob/main/requirements.txt" style="color: #a7beb6;">requirements.txt</a></li>
+<li><a href="https://github.com/author/repo/blob/main/sitemap.xml" style="color: #878aa3;">sitemap.xml</a></li>
+<h2>JavaScript</h2>
+<li><a href="https://github.com/author/repo/blob/main/.eslintrc.js" style="color: #40ee78;">.eslintrc.js</a></li>
+<h2>YAML</h2>
+<li><a href="https://github.com/author/repo/blob/main/.github/dependabot.yml" style="color: #9ec63e;">.github/dependabot.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/ActionLint.yml" style="color: #b8cc0d;">.github/workflows/ActionLint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/greetings.yml" style="color: #89901b;">.github/workflows/greetings.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/main.yml" style="color: #e27ae0;">.github/workflows/main.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/sitemap.yml" style="color: #eb94d5;">.github/workflows/sitemap.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/stale.yml" style="color: #7794d8;">.github/workflows/stale.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/static.yml" style="color: #4cdfb1;">.github/workflows/static.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.markdownlint.yml" style="color: #ac90ed;">.markdownlint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.scss-lint.yml" style="color: #b7831e;">.scss-lint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/_config.yml" style="color: #c09be7;">_config.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/action.yml" style="color: #c68b92;">action.yml</a></li>
+<h2>src</h2>
+<li><a href="https://github.com/author/repo/blob/main/src/generate_file_list.py" style="color: #f8c823;">src/generate_file_list.py</a></li></ul>`;
+                            break;
+                    }
+                    placeholder.innerHTML = file_list_html;
+                    observer.unobserve(placeholder);
+                    console.log(`Loaded content for ${contentId}`);
+                }
+            });
+        }, { rootMargin: rootMargin, threshold: threshold });
+
+        lazyLoadElements.forEach(element => {
+            element.style.marginTop = '-17px';
+            observer.observe(element);
+        });
+    } else {
+        lazyLoadElements.forEach(placeholder => {
+            let contentId = placeholder.dataset.content;
+            let file_list_html = '';
+            switch(contentId) {
+                case 'file-list-1':
+                    file_list_html = `<ul><h2>Repo Root</h2>
+<li><a href="https://github.com/author/repo/blob/main/.gitignore" style="color: #61d9b6;">.gitignore</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.jsbeautifyrc" style="color: #35c806;">.jsbeautifyrc</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.pre-commit-config.yaml" style="color: #a59ed6;">.pre-commit-config.yaml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.prettierrc" style="color: #bcad64;">.prettierrc</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.stylelintrc.json" style="color: #41a876;">.stylelintrc.json</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.vale.ini" style="color: #b07f53;">.vale.ini</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.yamllint" style="color: #4bd9d0;">.yamllint</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CNAME" style="color: #32ced0;">CNAME</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CODE_OF_CONDUCT.md" style="color: #857f97;">CODE_OF_CONDUCT.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/CONTRIBUTING.md" style="color: #da6f9e;">CONTRIBUTING.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/README.md" style="color: #d8c85f;">README.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/dockerfile" style="color: #f0b79c;">dockerfile</a></li>
+<li><a href="https://github.com/author/repo/blob/main/favicon.ico" style="color: #c3c695;">favicon.ico</a></li>
+<li><a href="https://github.com/author/repo/blob/main/file_list.html" style="color: #c29a35;">file_list.html</a></li>
+<li><a href="https://github.com/author/repo/blob/main/file_list.md" style="color: #c176dc;">file_list.md</a></li>
+<li><a href="https://github.com/author/repo/blob/main/readme.html" style="color: #7bab26;">readme.html</a></li>
+<li><a href="https://github.com/author/repo/blob/main/requirements.txt" style="color: #a7beb6;">requirements.txt</a></li>
+<li><a href="https://github.com/author/repo/blob/main/sitemap.xml" style="color: #878aa3;">sitemap.xml</a></li>
+<h2>JavaScript</h2>
+<li><a href="https://github.com/author/repo/blob/main/.eslintrc.js" style="color: #40ee78;">.eslintrc.js</a></li>
+<h2>YAML</h2>
+<li><a href="https://github.com/author/repo/blob/main/.github/dependabot.yml" style="color: #9ec63e;">.github/dependabot.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/ActionLint.yml" style="color: #b8cc0d;">.github/workflows/ActionLint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/greetings.yml" style="color: #89901b;">.github/workflows/greetings.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/main.yml" style="color: #e27ae0;">.github/workflows/main.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/sitemap.yml" style="color: #eb94d5;">.github/workflows/sitemap.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/stale.yml" style="color: #7794d8;">.github/workflows/stale.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.github/workflows/static.yml" style="color: #4cdfb1;">.github/workflows/static.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.markdownlint.yml" style="color: #ac90ed;">.markdownlint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/.scss-lint.yml" style="color: #b7831e;">.scss-lint.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/_config.yml" style="color: #c09be7;">_config.yml</a></li>
+<li><a href="https://github.com/author/repo/blob/main/action.yml" style="color: #c68b92;">action.yml</a></li>
+<h2>src</h2>
+<li><a href="https://github.com/author/repo/blob/main/src/generate_file_list.py" style="color: #f8c823;">src/generate_file_list.py</a></li></ul>`;
+                    break;
+            }
+            placeholder.innerHTML = file_list_html;
+        });
+    }
+});
+</script>

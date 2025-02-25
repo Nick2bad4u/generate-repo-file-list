@@ -189,11 +189,11 @@ IGNORE_LIST = [
 # Output format
 # Specifies the format of the output file.
 # Options: "markdown", "html"
-DEFAULT_OUTPUT_FORMAT = "markdown"
+DEFAULT_OUTPUT_FORMAT = "html"
 
 # Output file name
 # Specifies the default name of the output file based on the format.
-DEFAULT_OUTPUT_FILE = "file_list.md"
+DEFAULT_OUTPUT_FILE = "file_list.html"
 
 # Color source
 # Specifies the source of the colors used for the links.
@@ -906,7 +906,7 @@ def generate_file_list_with_links(
 
         if root_files:  # Check if there are root files
             if output_format == "html":
-                sorted_list.append(f"<li><h2>{REPO_ROOT_HEADER}</h2></li>")  # Add the root header
+                sorted_list.append(f"<h2>{REPO_ROOT_HEADER}</h2>")  # Add the root header
                 sorted_list.extend(
                     sorted(root_files, key=lambda x: os.path.splitext(x)[1])
                 )  # Add the sorted root files
@@ -919,7 +919,7 @@ def generate_file_list_with_links(
         for category in FILE_CATEGORIES:  # Iterate over the file categories
             if category["files"]:  # Check if the category has files
                 if output_format == "html":
-                    sorted_list.append(f'<li><h2>{category["name"]}</h2></li>')  # Add the category header
+                    sorted_list.append(f'<h2>{category["name"]}</h2>')  # Add the category header
                     sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
                 else:  # Markdown format
                     sorted_list.append(f"## {category['name']}")  # Add the category header
@@ -927,7 +927,7 @@ def generate_file_list_with_links(
 
         for folder in sorted(file_list_html):  # Iterate over the folders
             if output_format == "html":
-                sorted_list.append(f"<li><h2>{folder}</h2></li>")  # Add the folder header
+                sorted_list.append(f"<h2>{folder}</h2>")  # Add the folder header
                 sorted_list.extend(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
@@ -937,8 +937,6 @@ def generate_file_list_with_links(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
 
-        if output_format == "html":
-            sorted_list.append("</ul>")  # Add the closing tag
         return "\n".join(sorted_list)  # Return the file list
     except Exception as e:  # Handle errors
         logging.error(f"\033[1;31mError generating sorted file list: {e}\033[0m")  # Log the error
