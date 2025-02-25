@@ -67,14 +67,9 @@ jobs:
           curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
           chmod +x src/generate_file_list.py
 
-      - name: Download requirements.txt
-        run: |
-          curl -L -o requirements.txt https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/requirements.txt
-          chmod +x requirements.txt
-
       - name: Install dependencies (if any)
         run: |
-          python -m pip install -r requirements.txt
+          python -m pip install tqdm==4.66.4
           # Add any dependencies your script needs here
           # For example: pip install requests
 
@@ -117,7 +112,29 @@ jobs:
           script: |
             const fs = require('fs');
             const readmePath = './README.md';
-            const fileListPath = './file_list.md';
+            const fs = require('fs');
+                 const readmePath = './README.md';
+                 let fileListPath = './file_list.md';
+                 const fileListHTMLPath = './file_list.html';
+
+                 // Determine which file to use based on which is newer
+                 if (fs.existsSync(fileListPath) && fs.existsSync(fileListHTMLPath)) {
+              const fileListStat = fs.statSync(fileListPath);
+              const fileListHTMLStat = fs.statSync(fileListHTMLPath);
+
+              if (fileListHTMLStat.mtime > fileListStat.mtime) {
+                fileListPath = fileListHTMLPath;
+                console.log('Using file_list.html because it is newer than file_list.md');
+              } else {
+                console.log('Using file_list.md because it is newer than file_list.html');
+              }
+                 } else if (fs.existsSync(fileListHTMLPath)) {
+              fileListPath = fileListHTMLPath;
+              console.log('Using file_list.html because file_list.md does not exist');
+                 } else if (!fs.existsSync(fileListPath)) {
+              console.warn('Neither file_list.md nor file_list.html exist.  Aborting README.md update.');
+              return;
+                 }
 
             try {
               // Check if README.md exists, if not create it
@@ -166,6 +183,7 @@ jobs:
           commit_user_name: "{{ github.actor }}"
           commit_user_email: "{{ github.actor }}@users.noreply.github.com"
           commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
+
 
 
 ```
