@@ -189,11 +189,11 @@ IGNORE_LIST = [
 # Output format
 # Specifies the format of the output file.
 # Options: "markdown", "html"
-DEFAULT_OUTPUT_FORMAT = "html"
+DEFAULT_OUTPUT_FORMAT = "markdown"
 
 # Output file name
 # Specifies the default name of the output file based on the format.
-DEFAULT_OUTPUT_FILE = "file_list.html"
+DEFAULT_OUTPUT_FILE = "file_list.md"
 
 # Color source
 # Specifies the source of the colors used for the links.
@@ -876,9 +876,10 @@ def generate_file_list_with_links(
                             f'<li><a href="{file_url}" style="color: {category_color};">{file.replace(os.sep, "/")}</a></li>'
                         )  # Add the file to the category  # Create the HTML link
                     else:  # Markdown format
+                        category_color = get_random_color(color_range)  # Generate a random color for the category header
                         category["files"].append(
-                            f'- [{file.replace(os.sep, "/")}]({file_url})'
-                        )  # Add the file to the category  # Create the Markdown link
+                            f'<li><a href="{file_url}" style="color: {category_color};">{file.replace(os.sep, "/")}</a></li>'
+                        )  # Add the file to the category  # Create the HTML link
                     break  # Break out of the loop
             else:  # If the file does not belong to any category
                 folder = os.path.dirname(file)  # Get the folder name
@@ -888,9 +889,10 @@ def generate_file_list_with_links(
                         f'<li><a href="{file_url}" style="color: {category_color};">{file.replace(os.sep, "/")}</a></li>'
                     )  # Add the file to the folder  # Create the HTML link
                 else:  # Markdown format
+                    category_color = get_random_color(color_range)  # Generate a random color for the category header
                     file_list_html[folder].append(
-                        f'- [{file.replace(os.sep, "/")}]({file_url})'
-                    )  # Add the file to the folder  # Create the Markdown link
+                        f'<li><a href="{file_url}" style="color: {category_color};">{file.replace(os.sep, "/")}</a></li>'
+                    )  # Add the file to the folder  # Create the HTML link
 
         logging.log(  # Log the number of links generated
             getattr(logging, LOG_LEVEL_SETTING),
@@ -926,7 +928,8 @@ def generate_file_list_with_links(
                     sorted_list.append(f'<h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
                     sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
                 else:  # Markdown format
-                    sorted_list.append(f"## {category['name']}")  # Add the category header
+                    category_color = get_random_color(color_range)  # Generate a random color for the category header
+                    sorted_list.append(f'<h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
                     sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
 
         for folder in sorted(file_list_html):  # Iterate over the folders
@@ -937,7 +940,8 @@ def generate_file_list_with_links(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
             else:  # Markdown format
-                sorted_list.append(f"## {folder}")  # Add the folder header
+                folder_color = get_random_color(color_range)  # Generate a random color for the folder header
+                sorted_list.append(f'<h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
                 sorted_list.extend(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
@@ -1123,7 +1127,7 @@ def write_lazyload_script(f, file_list_chunks):  # Write the lazy loading script
             f.write(  # Write the file list HTML for the chunk
                 f"                            file_list_html = `<ul>{file_list_chunks[i]}</ul>`;\n"  # Add the file list HTML
             )
-            f.write(f"                            break;\n")  # Break out of the switch statement
+            f.write("                            break;\n")  # Break out of the switch statement
         f.write(  # Write the rest of the lazy loading script
             "                    }\n"  # End the switch statement
             "                    placeholder.innerHTML = file_list_html;\n"  # Set the inner HTML of the placeholder
@@ -1148,7 +1152,7 @@ def write_lazyload_script(f, file_list_chunks):  # Write the lazy loading script
             f.write(  # Write the file list HTML for the chunk
                 f"                    file_list_html = `<ul>{file_list_chunks[i]}</ul>`;\n"  # Add the file list HTML
             )
-            f.write(f"                    break;\n")  # Break out of the switch statement
+            f.write("                    break;\n")  # Break out of the switch statement
         f.write(
             "            }\n"  # End the switch statement
             "            placeholder.innerHTML = file_list_html;\n"  # Set the inner HTML of the placeholder
