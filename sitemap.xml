@@ -30,7 +30,7 @@
 </url>
 <url>
 <loc>https://tf2.typpi.online/README.md</loc>
-<lastmod>2025-02-24T22:39:30-05:00</lastmod>
+<lastmod>2025-02-26T11:51:09-05:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/_config.yml</loc>
@@ -42,11 +42,11 @@
 </url>
 <url>
 <loc>https://tf2.typpi.online/file_list.html</loc>
-<lastmod>2025-02-24T17:04:17-05:00</lastmod>
+<lastmod>2025-02-26T18:16:31-05:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/file_list.md</loc>
-<lastmod>2025-02-24T17:56:06+00:00</lastmod>
+<lastmod>2025-02-26T18:16:31-05:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/readme.html</loc>
@@ -55,6 +55,10 @@
 <url>
 <loc>https://tf2.typpi.online/requirements.txt</loc>
 <lastmod>2025-02-23T23:02:25-05:00</lastmod>
+</url>
+<url>
+<loc>https://tf2.typpi.online/sitemap.xml</loc>
+<lastmod>2025-02-25T04:47:15+00:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/.github/dependabot.yml</loc>
@@ -70,11 +74,11 @@
 </url>
 <url>
 <loc>https://tf2.typpi.online/.github/workflows/main.yml</loc>
-<lastmod>2025-02-24T18:33:08-05:00</lastmod>
+<lastmod>2025-02-26T11:51:09-05:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/.github/workflows/sitemap.yml</loc>
-<lastmod>2025-02-24T23:44:54-05:00</lastmod>
+<lastmod>2025-02-25T04:46:58+00:00</lastmod>
 </url>
 <url>
 <loc>https://tf2.typpi.online/.github/workflows/stale.yml</loc>
