@@ -24,3 +24,7 @@ repos:
       - id: mixed-line-ending
       - id: pretty-format-json
       - id: check-docstring-first
+  - repo: https://github.com/pylint-dev/pylint
+    rev: v2.17.2
+    hooks:
+      - id: pylint
