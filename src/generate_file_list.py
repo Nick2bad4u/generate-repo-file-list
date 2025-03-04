@@ -189,11 +189,11 @@ IGNORE_LIST = [
 # Output format
 # Specifies the format of the output file.
 # Options: "markdown", "html"
-DEFAULT_OUTPUT_FORMAT = "markdown"
+DEFAULT_OUTPUT_FORMAT = "html"
 
 # Output file name
 # Specifies the default name of the output file based on the format.
-DEFAULT_OUTPUT_FILE = "file_list.md"
+DEFAULT_OUTPUT_FILE = "file_list.html"
 
 # Color source
 # Specifies the source of the colors used for the links.
@@ -925,23 +925,23 @@ def generate_file_list_with_links(
             if category["files"]:  # Check if the category has files
                 if output_format == "html":
                     category_color = get_random_color(color_range)  # Generate a random color for the category header
-                    sorted_list.append(f'<br><h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
+                    sorted_list.append(f'<h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
                     sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
                 else:  # Markdown format
                     category_color = get_random_color(color_range)  # Generate a random color for the category header
-                    sorted_list.append(f'<br><h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
+                    sorted_list.append(f'<h2 style="color: {category_color};">{category["name"]}</h2>')  # Add the category header with color
                     sorted_list.extend(sorted(category["files"]))  # Add the sorted category files
 
         for folder in sorted(file_list_html):  # Iterate over the folders
             if output_format == "html":
                 folder_color = get_random_color(color_range)  # Generate a random color for the folder header
-                sorted_list.append(f'<br><h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
+                sorted_list.append(f'<h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
                 sorted_list.extend(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
             else:  # Markdown format
                 folder_color = get_random_color(color_range)  # Generate a random color for the folder header
-                sorted_list.append(f'<br><h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
+                sorted_list.append(f'<h2 style="color: {folder_color};">{folder}</h2>')  # Add the folder header with color
                 sorted_list.extend(
                     sort_files_by_extension(file_list_html[folder])
                 )  # Add the sorted files in the folder
