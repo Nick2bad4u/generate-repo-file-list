@@ -12,7 +12,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: daily
+      interval: monthly
     allow:
       # Allow both direct and indirect updates for all packages
       - dependency-type: "all"
@@ -27,4 +27,4 @@ updates:
   - package-ecosystem: pip
     directory: /
     schedule:
-      interval: daily
+      interval: monthly
