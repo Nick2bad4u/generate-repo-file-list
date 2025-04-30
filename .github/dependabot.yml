@@ -28,3 +28,13 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    labels:
+      - "pip"
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
