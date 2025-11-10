@@ -20,7 +20,7 @@ jobs:
 
         steps:
             - name: Harden the runner
-              uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+              uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
               with:
                   egress-policy: audit
 
@@ -125,7 +125,7 @@ jobs:
                   echo "Created and pushed tag ${{ steps.bump_version.outputs.new_tag }}"
 
             - name: Create GitHub Release
-              uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+              uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2.4.2
               with:
                   tag_name: ${{ steps.bump_version.outputs.new_tag }}
                   name: Release ${{ steps.bump_version.outputs.new_tag }}
