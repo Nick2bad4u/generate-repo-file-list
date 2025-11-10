@@ -9,6 +9,8 @@ on:
             - "LICENSE"
             - ".gitignore"
             - ".github/workflows/**"
+    workflow_dispatch:
+
 
 permissions:
     contents: write
