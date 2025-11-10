@@ -23,165 +23,172 @@ Example of Markdown file list: [Markdown File List Example](#example-of-the-gene
 name: Generate and Update README.MD File List
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: # Allows manual triggering
+ push:
+  branches:
+   - main
+ pull_request:
+  branches:
+   - main
+ workflow_dispatch: # Allows manual triggering
 
 permissions:
-  contents: write
-  pull-requests: write
+ contents: write
+ pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+ build:
+  runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  steps:
+   - name: Checkout repository
+     uses: actions/checkout@v4
 
-      - name: List files in the repository
-        run: |
-          ls -al
+   - name: List files in the repository
+     run: |
+      ls -al
 
-      - name: Verify README.md exists
-        run: |
-          if [ ! -f README.md ]; then
-            echo "README.md not found!"
-            exit 1
-          fi
+   - name: Verify README.md exists
+     run: |
+      if [ ! -f README.md ]; then
+        echo "README.md not found!"
+        exit 1
+      fi
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+   - name: Set up Python
+     uses: actions/setup-python@v5
+     with:
+      python-version: "3.x"
 
-      - name: Create src directory
-        run: mkdir -p src
+   - name: Create src directory
+     run: mkdir -p src
 
-      - name: Download generate_file_list.py
-        run: |
-          curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
-          chmod +x src/generate_file_list.py
+   - name: Download generate_file_list.py
+     run: |
+      curl -L -o src/generate_file_list.py https://github.com/Nick2bad4u/generate-repo-file-list/raw/refs/heads/main/src/generate_file_list.py
+      chmod +x src/generate_file_list.py
 
-      - name: Install dependencies (if any)
-        run: |
-          python -m pip install tqdm==4.66.4
-          # Add any dependencies your script needs here
-          # For example: pip install requests
+   - name: Install dependencies (if any)
+     run: |
+      python -m pip install tqdm==4.66.4
+      # Add any dependencies your script needs here
+      # For example: pip install requests
 
-      - name: Run Generate Repo File List Action
-        uses: nick2bad4u/generate-repo-file-list@main
-        with:
-          log-level: "INFO"
-          directory: "."
-          repo-url: "https://github.com/${{ github.repository }}"
-          fallback-repo-url: "https://github.com/${{ github.repository }}"
-          output-format: "html"
-          output-file: "file_list.html"
-          color-source: "random"
-          color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
-          color-range-start: "#000000"
-          color-range-end: "#FFFFFF"
-          max-attempts: "1000000"
-          exclude-blacks-threshold: "#222222"
-          exclude-dark-colors: "false"
-          exclude-bright-colors: "false"
-          exclude-blacks: "false"
-          ensure-readable-colors: "false"
-          repo-root-header: "Repo Root"
-          header-text: "## File List"
-          intro-text: "# Here is a list of files included in this repository:"
-          dark-color-luminance-threshold: "128"
-          bright-color-luminance-threshold: "200"
-          chunk-size: "40"
-          viewport-mobile: "768"
-          viewport-tablet: "1024"
-          viewport-small-desktop: "1440"
-          root-margin-large-desktop: "0px 0px 400px 0px"
-          root-margin-small-desktop: "0px 0px 300px 0px"
-          root-margin-tablet: "0px 0px 200px 0px"
-          root-margin-mobile: "0px 0px 100px 0px"
+   - name: Run Generate Repo File List Action
+     uses: nick2bad4u/generate-repo-file-list@main
+     with:
+      log-level: "INFO"
+      directory: "."
+      repo-url: "https://github.com/${{ github.repository }}"
+      fallback-repo-url: "https://github.com/${{ github.repository }}"
+      output-format: "html"
+      output-file: "file_list.html"
+      color-source: "random"
+      color-list: "#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF"
+      color-range-start: "#000000"
+      color-range-end: "#FFFFFF"
+      file-categories: ""
+      overwrite-file-categories: "false"
+      ignore-list: ""
+      overwrite-ignore-list: "false"
+      max-attempts: "1000000"
+      exclude-blacks-threshold: "#222222"
+      exclude-dark-colors: "false"
+      exclude-bright-colors: "false"
+      exclude-blacks: "false"
+      ensure-readable-colors: "false"
+      repo-root-header: "Repo Root"
+      header-text: "## File List"
+      intro-text: "# Here is a list of files included in this repository:"
+      dark-color-luminance-threshold: "128"
+      bright-color-luminance-threshold: "200"
+      chunk-size: "40"
+      viewport-mobile: "768"
+      viewport-tablet: "1024"
+      viewport-small-desktop: "1440"
+      root-margin-large-desktop: "0px 0px 400px 0px"
+      root-margin-small-desktop: "0px 0px 300px 0px"
+      root-margin-tablet: "0px 0px 200px 0px"
+      root-margin-mobile: "0px 0px 100px 0px"
+      respect-gitignore: "true"
+      default-branch: "${{ github.event.repository.default_branch }}"
+      link-ref: "${{ github.sha }}"
+      output-file-stdout: "false"
 
-      - name: Update README.md
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-                 const readmePath = './README.md';
-                 let fileListPath = './file_list.md';
-                 const fileListHTMLPath = './file_list.html';
+   - name: Update README.md
+     uses: actions/github-script@v7
+     with:
+      script: |
+       const fs = require('fs');
+            const readmePath = './README.md';
+            let fileListPath = './file_list.md';
+            const fileListHTMLPath = './file_list.html';
 
-                 // Determine which file to use based on which is newer
-                 if (fs.existsSync(fileListPath) && fs.existsSync(fileListHTMLPath)) {
-              const fileListStat = fs.statSync(fileListPath);
-              const fileListHTMLStat = fs.statSync(fileListHTMLPath);
+            // Determine which file to use based on which is newer
+            if (fs.existsSync(fileListPath) && fs.existsSync(fileListHTMLPath)) {
+         const fileListStat = fs.statSync(fileListPath);
+         const fileListHTMLStat = fs.statSync(fileListHTMLPath);
 
-              if (fileListHTMLStat.mtime > fileListStat.mtime) {
-                fileListPath = fileListHTMLPath;
-                console.log('Using file_list.html because it is newer than file_list.md');
-              } else {
-                console.log('Using file_list.md because it is newer than file_list.html');
-              }
-                 } else if (fs.existsSync(fileListHTMLPath)) {
-              fileListPath = fileListHTMLPath;
-              console.log('Using file_list.html because file_list.md does not exist');
-                 } else if (!fs.existsSync(fileListPath)) {
-              console.warn('Neither file_list.md nor file_list.html exist.  Aborting README.md update.');
-              return;
-                 }
-
-            try {
-              // Check if README.md exists, if not create it
-              if (!fs.existsSync(readmePath)) {
-              console.warn('README.md not found. Creating a new README.md file.');
-              fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
-              }
-
-              // Read the contents of README.md
-              let readmeContent = fs.readFileSync(readmePath, 'utf8');
-
-              // Read the contents of file_list.md
-              const fileListContent = fs.readFileSync(fileListPath, 'utf8');
-
-              // Define start and end markers for the file list section
-              const startMarker = '<!-- FILE_LIST_START -->';
-              const endMarker = '<!-- FILE_LIST_END -->';
-
-              // Find the start and end positions of the file list section
-              const startPosition = readmeContent.indexOf(startMarker);
-              const endPosition = readmeContent.indexOf(endMarker);
-
-              // Check if the markers exist in the README.md file
-              if (startPosition === -1 || endPosition === -1) {
-                console.warn('Start or end markers not found in README.md.  The action will add the markers with the file list to the end of the file.');
-                readmeContent += `\n${startMarker}\n${fileListContent}\n${endMarker}\n`;
-              } else {
-                // Replace the existing file list with the new content
-                readmeContent = readmeContent.substring(0, startPosition + startMarker.length) +
-                  '\n' + fileListContent + '\n' +
-                  readmeContent.substring(endPosition);
-              }
-
-              // Write the updated content back to README.md
-              fs.writeFileSync(readmePath, readmeContent);
-              console.log('Successfully updated README.md');
-            } catch (error) {
-              console.error('Failed to update README.md:', error);
+         if (fileListHTMLStat.mtime > fileListStat.mtime) {
+           fileListPath = fileListHTMLPath;
+           console.log('Using file_list.html because it is newer than file_list.md');
+         } else {
+           console.log('Using file_list.md because it is newer than file_list.html');
+         }
+            } else if (fs.existsSync(fileListHTMLPath)) {
+         fileListPath = fileListHTMLPath;
+         console.log('Using file_list.html because file_list.md does not exist');
+            } else if (!fs.existsSync(fileListPath)) {
+         console.warn('Neither file_list.md nor file_list.html exist.  Aborting README.md update.');
+         return;
             }
 
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update file list in README.md automatically with GitHub Action"
-          file_pattern: "README.md"
-          commit_user_name: "{{ github.actor }}"
-          commit_user_email: "{{ github.actor }}@users.noreply.github.com"
-          commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
+       try {
+         // Check if README.md exists, if not create it
+         if (!fs.existsSync(readmePath)) {
+         console.warn('README.md not found. Creating a new README.md file.');
+         fs.writeFileSync(readmePath, '# Project Title\n\n<!-- FILE_LIST_START -->\n<!-- FILE_LIST_END -->\n');
+         }
 
+         // Read the contents of README.md
+         let readmeContent = fs.readFileSync(readmePath, 'utf8');
+
+         // Read the contents of file_list.md
+         const fileListContent = fs.readFileSync(fileListPath, 'utf8');
+
+         // Define start and end markers for the file list section
+         const startMarker = '<!-- FILE_LIST_START -->';
+         const endMarker = '<!-- FILE_LIST_END -->';
+
+         // Find the start and end positions of the file list section
+         const startPosition = readmeContent.indexOf(startMarker);
+         const endPosition = readmeContent.indexOf(endMarker);
+
+         // Check if the markers exist in the README.md file
+         if (startPosition === -1 || endPosition === -1) {
+           console.warn('Start or end markers not found in README.md.  The action will add the markers with the file list to the end of the file.');
+           readmeContent += `\n${startMarker}\n${fileListContent}\n${endMarker}\n`;
+         } else {
+           // Replace the existing file list with the new content
+           readmeContent = readmeContent.substring(0, startPosition + startMarker.length) +
+             '\n' + fileListContent + '\n' +
+             readmeContent.substring(endPosition);
+         }
+
+         // Write the updated content back to README.md
+         fs.writeFileSync(readmePath, readmeContent);
+         console.log('Successfully updated README.md');
+       } catch (error) {
+         console.error('Failed to update README.md:', error);
+       }
+
+   - name: Commit and push changes
+     uses: stefanzweifel/git-auto-commit-action@v5
+     with:
+      commit_message: "Update file list in README.md automatically with GitHub Action"
+      file_pattern: "README.md"
+      commit_user_name: "{{ github.actor }}"
+      commit_user_email: "{{ github.actor }}@users.noreply.github.com"
+      commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
 ```
 
 ### Inputs
@@ -226,6 +233,63 @@ jobs:
 - `root-margin-small-desktop`: Root margin for the IntersectionObserver for small desktops. Default is `0px 0px 300px 0px`.
 - `root-margin-tablet`: Root margin for the IntersectionObserver for tablets. Default is `0px 0px 200px 0px`.
 - `root-margin-mobile`: Root margin for the IntersectionObserver for mobile devices. Default is `0px 0px 100px 0px`.
+- `file-categories`: Optional space-separated EXT/NAME pairs (e.g., `.py Python .js JavaScript`) to append to the default category list. Leave blank to keep defaults.
+- `overwrite-file-categories`: Set to `true` to replace the default categories with the values provided in `file-categories`.
+- `ignore-list`: Optional space-separated list of additional directories or files to ignore during traversal.
+- `overwrite-ignore-list`: Set to `true` to replace the default ignore list with the entries provided in `ignore-list`.
+- `respect-gitignore`: Set to `true` to honour `.gitignore` rules by using `git ls-files` when available before falling back to a full filesystem walk.
+- `default-branch`: Fallback branch, tag, or ref used when `link-ref` is not supplied. Defaults to the current branch detected at runtime (or `main`).
+- `link-ref`: Explicit branch, tag, or commit to use when building file links (e.g., `${{ github.sha }}` for deterministic snapshots).
+- `output-file-stdout`: Set to `true` to emit the generated list to stdout instead of writing to disk.
+```
+
+## Running tests
+
+```powershell
+pip install -r requirements.txt
+pytest
+```
+
+## Versioning and Releases
+
+This action uses automated semantic versioning. When you push changes to the `main` branch:
+
+1. The workflow automatically determines the version bump type based on commit messages:
+   - **Major** (`v2.0.0`): Commits with `BREAKING CHANGE` or `!:` in the message
+   - **Minor** (`v1.1.0`): Commits starting with `feat:` or `feature:`
+   - **Patch** (`v1.0.1`): All other commits (bug fixes, docs, etc.)
+
+2. A new version tag is created and pushed (e.g., `v1.2.3`)
+3. A GitHub Release is automatically created with generated changelog
+4. A major version tag is updated (e.g., `v1`) to point to the latest release
+
+### Using the Action with Versions
+
+Recommended approach - use the major version tag for automatic updates:
+
+```yaml
+- uses: nick2bad4u/generate-repo-file-list@v1
+```
+
+Or pin to a specific version for stability:
+
+```yaml
+- uses: nick2bad4u/generate-repo-file-list@v1.2.3
+```
+
+### Commit Message Examples
+
+```bash
+# Patch bump (v1.0.0 -> v1.0.1)
+git commit -m "fix: correct file path handling"
+
+# Minor bump (v1.0.0 -> v1.1.0)
+git commit -m "feat: add support for custom file categories"
+
+# Major bump (v1.0.0 -> v2.0.0)
+git commit -m "feat!: change API structure
+
+BREAKING CHANGE: action inputs have been restructured"
 ```
 
 # Below is an example of the generated file list in Markdown format

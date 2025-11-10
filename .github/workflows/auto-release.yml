@@ -1,0 +1,151 @@
+name: Auto Release
+
+on:
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - "**.md"
+            - "LICENSE"
+            - ".gitignore"
+            - ".github/workflows/**"
+
+permissions:
+    contents: write
+    pull-requests: read
+
+jobs:
+    auto-release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+              with:
+                  egress-policy: audit
+
+            - name: Checkout repository
+              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+              with:
+                  fetch-depth: 0
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Get latest tag
+              id: get_tag
+              run: |
+                  # Get the latest semantic version tag (v*.*.*)
+                  LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n1)
+
+                  if [ -z "$LATEST_TAG" ]; then
+                    # No semantic version tags exist, start from v1.0.0
+                    echo "latest_tag=v0.0.0" >> $GITHUB_OUTPUT
+                    echo "version=1.0.0" >> $GITHUB_OUTPUT
+                  else
+                    echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+                    # Strip the 'v' prefix for version manipulation
+                    VERSION="${LATEST_TAG#v}"
+                    echo "version=$VERSION" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Determine version bump
+              id: bump_version
+              run: |
+                  VERSION="${{ steps.get_tag.outputs.version }}"
+
+                  # Parse current version
+                  IFS='.' read -ra VER <<< "$VERSION"
+                  MAJOR="${VER[0]}"
+                  MINOR="${VER[1]}"
+                  PATCH="${VER[2]}"
+
+                  # Determine bump type from commit messages
+                  COMMITS=$(git log ${{ steps.get_tag.outputs.latest_tag }}..HEAD --pretty=format:"%s")
+
+                  # Check for breaking changes (major bump)
+                  if echo "$COMMITS" | grep -qiE "BREAKING CHANGE|!:"; then
+                    MAJOR=$((MAJOR + 1))
+                    MINOR=0
+                    PATCH=0
+                    BUMP_TYPE="major"
+                  # Check for features (minor bump)
+                  elif echo "$COMMITS" | grep -qiE "^feat(\(.+\))?:|^feature:"; then
+                    MINOR=$((MINOR + 1))
+                    PATCH=0
+                    BUMP_TYPE="minor"
+                  # Default to patch bump
+                  else
+                    PATCH=$((PATCH + 1))
+                    BUMP_TYPE="patch"
+                  fi
+
+                  NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+                  NEW_TAG="v$NEW_VERSION"
+
+                  echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+                  echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+                  echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+
+                  echo "Bumping version from ${{ steps.get_tag.outputs.latest_tag }} to $NEW_TAG (type: $BUMP_TYPE)"
+
+            - name: Generate changelog
+              id: changelog
+              run: |
+                  LATEST_TAG="${{ steps.get_tag.outputs.latest_tag }}"
+
+                  if [ "$LATEST_TAG" = "v0.0.0" ]; then
+                    # First release - include all commits
+                    CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
+                  else
+                    # Generate changelog from last tag to HEAD
+                    CHANGELOG=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+                  fi
+
+                  # Save changelog to file for multiline handling
+                  echo "$CHANGELOG" > /tmp/changelog.txt
+
+                  # Create a formatted changelog
+                  cat > /tmp/release_notes.md << EOF
+                  ## What's Changed
+
+                  $CHANGELOG
+
+                  **Full Changelog**: https://github.com/${{ github.repository }}/compare/${LATEST_TAG}...${{ steps.bump_version.outputs.new_tag }}
+                  EOF
+
+                  echo "Release notes generated for ${{ steps.bump_version.outputs.new_tag }}"
+
+            - name: Create and push tag
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                  git tag -a ${{ steps.bump_version.outputs.new_tag }} -m "Release ${{ steps.bump_version.outputs.new_tag }}"
+                  git push origin ${{ steps.bump_version.outputs.new_tag }}
+
+                  echo "Created and pushed tag ${{ steps.bump_version.outputs.new_tag }}"
+
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+              with:
+                  tag_name: ${{ steps.bump_version.outputs.new_tag }}
+                  name: Release ${{ steps.bump_version.outputs.new_tag }}
+                  body_path: /tmp/release_notes.md
+                  draft: false
+                  prerelease: false
+                  generate_release_notes: true
+
+            - name: Update major version tag
+              run: |
+                  # Extract major version
+                  NEW_TAG="${{ steps.bump_version.outputs.new_tag }}"
+                  MAJOR_VERSION=$(echo $NEW_TAG | cut -d. -f1)
+
+                  # Delete existing major tag if it exists (locally and remotely)
+                  git tag -d $MAJOR_VERSION 2>/dev/null || true
+                  git push origin :refs/tags/$MAJOR_VERSION 2>/dev/null || true
+
+                  # Create new major version tag
+                  git tag -a $MAJOR_VERSION -m "Major version $MAJOR_VERSION"
+                  git push origin $MAJOR_VERSION
+
+                  echo "Updated major version tag $MAJOR_VERSION to point to $NEW_TAG"
