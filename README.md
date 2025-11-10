@@ -1,23 +1,98 @@
-# Generate Repo File List GitHub Action
+<div align="center">
 
-This GitHub Action generates an HTML file list for a GitHub repository with links to each file. It updates the `README.md` file with the generated file list.
+# 📂 Generate Repo File List
 
-## Usage
+### 🚀 Automatically create beautiful, organized file indexes for your GitHub repositories
 
-To use this action, create a workflow file (e.g., `.github/workflows/main.yml`) in your repository with the following content:
+[![GitHub release](https://img.shields.io/github/v/release/Nick2bad4u/generate-repo-file-list?style=for-the-badge&logo=github)](https://github.com/Nick2bad4u/generate-repo-file-list/releases)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Nick2bad4u/generate-repo-file-list/main.yml?style=for-the-badge&label=tests)](https://github.com/Nick2bad4u/generate-repo-file-list/actions)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge&logo=python)](https://www.python.org)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg?style=for-the-badge)](https://unlicense.org)
 
-Place `2` file markers in your README.md: `<!-- FILE_LIST_START -->` and `<!-- FILE_LIST_END -->` - the file list will be automatically added between these 2 points in your `README.md`
+---
 
-Remove the `cron` job if you don't want to run the action daily.
-You can also remoove the `push` and `pull_request` triggers if you only want to run the action manually.
+**Transform your repository structure into beautifully formatted HTML or Markdown file listings with custom colors, lazy loading, and automatic README updates.**
 
-If you don't want to have your `README.md` updated automatically, you can remove the "Commit and push changes" and "Update README.md" steps. You can then use the generated `file_list.md` file to update your `README.md` manually (or for any other purpose).
+[🎯 Features](#-features) • [🚀 Quick Start](#-quick-start) • [⚙️ Configuration](#️-configuration) • [📖 Examples](#-examples) • [🔄 Versioning](#-versioning-and-releases)
 
-Inputs are described in the [Inputs](#inputs) section.
+</div>
 
-Example of HTML file list: [HTML File List Example](example-of-the-generated-file-list-in-html-format-without-codeblock)
+---
 
-Example of Markdown file list: [Markdown File List Example](#example-of-the-generated-file-list-in-markdown-format-without-codeblock)
+## ✨ Features
+
+- 🎨 **Colorful Output** - Generate file lists with vibrant, customizable color schemes
+- 📱 **Responsive Design** - Lazy loading optimized for mobile, tablet, and desktop viewports
+- 🔄 **Auto README Updates** - Seamlessly inject file lists into your README using markers
+- 🎯 **Smart Categorization** - Organize files by extension (Python, YAML, JavaScript, etc.)
+- 🚫 **Gitignore Integration** - Respect `.gitignore` rules for clean file discovery
+- 📊 **Dual Format Support** - Generate both HTML and Markdown outputs
+- ⚡ **Performance Optimized** - Chunk-based rendering for large repositories
+- 🔒 **Secure** - Hardened runner and comprehensive security best practices
+
+---
+
+## 🚀 Quick Start
+
+### 📋 Prerequisites
+
+Add these markers to your `README.md` where you want the file list to appear:
+
+```markdown
+<!-- FILE_LIST_START -->
+<!-- FILE_LIST_END -->
+```
+
+### 🎬 Basic Workflow Setup
+
+Create `.github/workflows/file-list.yml` in your repository:
+
+```yaml
+name: 📂 Generate File List
+
+on:
+ push:
+  branches: [main]
+ workflow_dispatch:
+
+permissions:
+ contents: write
+
+jobs:
+ generate-file-list:
+  runs-on: ubuntu-latest
+
+  steps:
+   - name: 📥 Checkout repository
+     uses: actions/checkout@v4
+
+   - name: 🐍 Set up Python
+     uses: actions/setup-python@v5
+     with:
+      python-version: "3.x"
+
+   - name: 📂 Generate File List
+     uses: nick2bad4u/generate-repo-file-list@v1
+     with:
+      directory: "."
+      output-format: "markdown"
+      output-file: "file_list.md"
+      respect-gitignore: "true"
+
+   - name: 💾 Commit Changes
+     uses: stefanzweifel/git-auto-commit-action@v5
+     with:
+      commit_message: "📂 Update file list automatically"
+```
+
+> 💡 **Tip**: Remove the `cron` schedule if you only want manual/push-triggered runs.
+
+---
+
+## 📖 Advanced Workflow Example
+
+<details>
+<summary>🔧 Click to see full-featured workflow with all options</summary>
 
 ```yaml
 name: Generate and Update README.MD File List
@@ -191,205 +266,354 @@ jobs:
       commit_author: "{{ github.actor }} <{{ github.actor }}@users.noreply.github.com>"
 ```
 
-### Inputs
+</details>
 
-#### The inputs for the action are defined in the `with` section of the action step
+---
 
-#### You can customize the inputs based on your requirements
+## ⚙️ Configuration
 
-#### The most common inputs to change are the `repo-url`, `fallback-repo-url`, `output-format`, and `output-file`
+---
 
-#### If you want to change the output format to HTML, set `output-format` to `html`. This will generate an HTML file list instead of a Markdown file list, which provides better styling and interactivity for web viewing or GitHub Pages deployment. HTML format allows for more customization, and also enables you to color file links, and use lazy loading for large file lists
+## ⚙️ Configuration
 
-#### The following inputs can be used with the action
+### 🎛️ Input Parameters
 
-```markdown
-- `log-level`: Set the logging level setting manually instead of pulling from the environment. Possible values are `DEBUG`, `INFO`, `WARN`, `ERROR`. Default is `INFO`.
-- `directory`: Root directory of the repository to generate the file list for. Default is the current directory.
-- `repo-url`: GitHub repository URL to use for generating file links. Default is determined by the Git configuration.
-- `fallback-repo-url`: Fallback GitHub repository URL to use if the default URL cannot be determined. Default is `https://github.com/${{ github.repository }}`.
-- `output-format`: File format to be output in. Possible values are `markdown` and `html`. Default is `markdown`.
-- `output-file`: Name of the output file to save the generated file list. The file extension should match the `output-format` (e.g., `file_list.md` for Markdown, `file_list.html` for HTML). Default is `file_list.md`.
-- `color-source`: Source of colors for the file links. Choose `random` for randomly generated colors or `list` to use a predefined list of colors. Default is `random`.
-- `color-list`: List of colors to use when the color source is set to `list`. Provide colors in hex format (e.g., `#FF0000`). Default is `#FF0000 #00FF00 #0000FF #FFFF00 #FF00FF #00FFFF`.
-- `color-range-start`: Start of the range of colors (hex code) for random color generation (e.g., `#000000`). Default is `#000000`.
-- `color-range-end`: End of the range of colors (hex code) for random color generation (e.g., `#FFFFFF`). Default is `#FFFFFF`.
-- `max-attempts`: Maximum number of attempts to generate a valid color. Default is `1000000`.
-- `exclude-blacks-threshold`: Threshold for excluding black colors. Any color below this threshold on the color chart will be excluded (e.g., `#222222`). Default is `#222222`.
-- `exclude-dark-colors`: Exclude dark colors from being used for file links. Use this option to avoid dark colors. Default is `false`.
-- `exclude-bright-colors`: Exclude bright colors from being used for file links. Use this option to avoid bright colors. Default is `false`.
-- `exclude-blacks`: Exclude black colors below a certain threshold from being used for file links. Use this option to avoid very dark colors. Default is `false`.
-- `ensure-readable-colors`: Ensure that the generated colors are readable by maintaining a certain contrast ratio with a white background. Default is `false`.
-- `repo-root-header`: Header text for files located in the root of the repository. Default is `Repo Root`.
-- `header-text`: Header text for the file list displayed at the top of the generated HTML file. Default is `## File List`.
-- `intro-text`: Introductory text for the file list displayed below the header in the generated HTML file. Default is `# Here is a list of files included in this repository:`.
-- `dark-color-luminance-threshold`: Luminance threshold for determining if a color is dark. Colors with luminance below this value will be considered dark. Default is `128`.
-- `bright-color-luminance-threshold`: Luminance threshold for determining if a color is bright. Colors with luminance above this value will be considered bright. Default is `200`.
-- `chunk-size`: Number of lines per chunk for lazy loading the file list. Default is `40`.
-- `viewport-mobile`: Viewport size for mobile devices in pixels. Default is `768`.
-- `viewport-tablet`: Viewport size for tablets in pixels. Default is `1024`.
-- `viewport-small-desktop`: Viewport size for small desktops in pixels. Default is `1440`.
-- `root-margin-large-desktop`: Root margin for the IntersectionObserver for large desktop viewport. Default is `0px 0px 400px 0px`.
-- `root-margin-small-desktop`: Root margin for the IntersectionObserver for small desktops. Default is `0px 0px 300px 0px`.
-- `root-margin-tablet`: Root margin for the IntersectionObserver for tablets. Default is `0px 0px 200px 0px`.
-- `root-margin-mobile`: Root margin for the IntersectionObserver for mobile devices. Default is `0px 0px 100px 0px`.
-- `file-categories`: Optional space-separated EXT/NAME pairs (e.g., `.py Python .js JavaScript`) to append to the default category list. Leave blank to keep defaults.
-- `overwrite-file-categories`: Set to `true` to replace the default categories with the values provided in `file-categories`.
-- `ignore-list`: Optional space-separated list of additional directories or files to ignore during traversal.
-- `overwrite-ignore-list`: Set to `true` to replace the default ignore list with the entries provided in `ignore-list`.
-- `respect-gitignore`: Set to `true` to honour `.gitignore` rules by using `git ls-files` when available before falling back to a full filesystem walk.
-- `default-branch`: Fallback branch, tag, or ref used when `link-ref` is not supplied. Defaults to the current branch detected at runtime (or `main`).
-- `link-ref`: Explicit branch, tag, or commit to use when building file links (e.g., `${{ github.sha }}` for deterministic snapshots).
-- `output-file-stdout`: Set to `true` to emit the generated list to stdout instead of writing to disk.
+<details open>
+<summary><b>🔧 Essential Inputs</b></summary>
+
+| Parameter           | Description            | Default        | Options            |
+| ------------------- | ---------------------- | -------------- | ------------------ |
+| `directory`         | Root directory to scan | `.`            | Any valid path     |
+| `output-format`     | File format            | `markdown`     | `markdown`, `html` |
+| `output-file`       | Output filename        | `file_list.md` | Any filename       |
+| `repo-url`          | Repository URL         | Auto-detected  | GitHub URL         |
+| `respect-gitignore` | Honor `.gitignore`     | `false`        | `true`, `false`    |
+
+</details>
+
+<details>
+<summary><b>🎨 Color & Styling Inputs</b></summary>
+
+| Parameter                | Description             | Default                   |
+| ------------------------ | ----------------------- | ------------------------- |
+| `color-source`           | Color generation method | `random`                  |
+| `color-list`             | Custom color palette    | `#FF0000 #00FF00 #0000FF` |
+| `color-range-start`      | Min color for random    | `#000000`                 |
+| `color-range-end`        | Max color for random    | `#FFFFFF`                 |
+| `exclude-dark-colors`    | Skip dark colors        | `false`                   |
+| `exclude-bright-colors`  | Skip bright colors      | `false`                   |
+| `ensure-readable-colors` | Maintain contrast ratio | `false`                   |
+
+</details>
+
+<details>
+<summary><b>📱 Responsive & Performance Inputs</b></summary>
+
+| Parameter                | Description                | Default             |
+| ------------------------ | -------------------------- | ------------------- |
+| `chunk-size`             | Lines per lazy-load chunk  | `40`                |
+| `viewport-mobile`        | Mobile breakpoint (px)     | `768`               |
+| `viewport-tablet`        | Tablet breakpoint (px)     | `1024`              |
+| `viewport-small-desktop` | Desktop breakpoint (px)    | `1440`              |
+| `root-margin-mobile`     | Mobile intersection margin | `0px 0px 100px 0px` |
+| `root-margin-tablet`     | Tablet intersection margin | `0px 0px 200px 0px` |
+
+</details>
+
+<details>
+<summary><b>📂 File Organization Inputs</b></summary>
+
+| Parameter                   | Description                | Default               |
+| --------------------------- | -------------------------- | --------------------- |
+| `file-categories`           | Custom ext/name pairs      | ` `                   |
+| `overwrite-file-categories` | Replace default categories | `false`               |
+| `ignore-list`               | Additional ignore patterns | ` `                   |
+| `overwrite-ignore-list`     | Replace default ignores    | `false`               |
+| `repo-root-header`          | Root folder header         | `Repo Root`           |
+| `header-text`               | Main file list header      | `## File List`        |
+| `intro-text`                | Intro paragraph            | `# Here is a list...` |
+
+</details>
+
+<details>
+<summary><b>🔗 Version Control Inputs</b></summary>
+
+| Parameter            | Description            | Default        |
+| -------------------- | ---------------------- | -------------- |
+| `link-ref`           | Git ref for file links | Current branch |
+| `default-branch`     | Fallback branch        | `main`         |
+| `output-file-stdout` | Print to stdout        | `false`        |
+| `log-level`          | Logging verbosity      | `INFO`         |
+
+</details>
+
+---
+
+## 📖 Examples
+
+### 🎨 HTML Output with Custom Colors
+
+```yaml
+- uses: nick2bad4u/generate-repo-file-list@v1
+  with:
+   output-format: "html"
+   output-file: "file_list.html"
+   color-source: "list"
+   color-list: "#FF6B6B #4ECDC4 #45B7D1 #FFA07A #98D8C8"
+   chunk-size: "50"
 ```
 
-## Running tests
+### 📝 Markdown with Gitignore Respect
+
+```yaml
+- uses: nick2bad4u/generate-repo-file-list@v1
+  with:
+   output-format: "markdown"
+   respect-gitignore: "true"
+   ignore-list: "build dist .venv"
+```
+
+### 🏷️ Custom File Categories
+
+```yaml
+- uses: nick2bad4u/generate-repo-file-list@v1
+  with:
+   file-categories: ".tsx TypeScript .vue Vue .rs Rust"
+   overwrite-file-categories: "false"
+```
+
+---
+
+## 🧪 Running Tests
 
 ```powershell
+# Install dependencies
 pip install -r requirements.txt
+
+# Run test suite
 pytest
 ```
 
-## Versioning and Releases
+```bash
+# Linux/macOS
+pip install -r requirements.txt && pytest
+```
 
-This action uses automated semantic versioning. When you push changes to the `main` branch:
+---
 
-1. The workflow automatically determines the version bump type based on commit messages:
-   - **Major** (`v2.0.0`): Commits with `BREAKING CHANGE` or `!:` in the message
-   - **Minor** (`v1.1.0`): Commits starting with `feat:` or `feature:`
-   - **Patch** (`v1.0.1`): All other commits (bug fixes, docs, etc.)
+## 🔄 Versioning and Releases
 
-2. A new version tag is created and pushed (e.g., `v1.2.3`)
-3. A GitHub Release is automatically created with generated changelog
-4. A major version tag is updated (e.g., `v1`) to point to the latest release
+This action uses **automated semantic versioning** 🤖. Every push to `main` triggers intelligent version detection:
 
-### Using the Action with Versions
+### 📈 Version Bump Rules
 
-Recommended approach - use the major version tag for automatic updates:
+| Commit Pattern            | Bump Type    | Example             |
+| ------------------------- | ------------ | ------------------- |
+| `BREAKING CHANGE` or `!:` | 🔴 **Major** | `v1.0.0` → `v2.0.0` |
+| `feat:` or `feature:`     | 🟡 **Minor** | `v1.0.0` → `v1.1.0` |
+| All others                | 🟢 **Patch** | `v1.0.0` → `v1.0.1` |
+
+### ✅ Recommended Usage
+
+**Option 1:** Auto-update with latest compatible version (recommended)
 
 ```yaml
 - uses: nick2bad4u/generate-repo-file-list@v1
 ```
 
-Or pin to a specific version for stability:
+**Option 2:** Pin to specific version for maximum stability
 
 ```yaml
 - uses: nick2bad4u/generate-repo-file-list@v1.2.3
 ```
 
-### Commit Message Examples
+### 💬 Commit Message Examples
 
 ```bash
-# Patch bump (v1.0.0 -> v1.0.1)
-git commit -m "fix: correct file path handling"
+# 🟢 Patch: v1.0.0 → v1.0.1
+git commit -m "fix: correct Windows path handling"
 
-# Minor bump (v1.0.0 -> v1.1.0)
-git commit -m "feat: add support for custom file categories"
+# 🟡 Minor: v1.0.0 → v1.1.0
+git commit -m "feat: add lazy loading for large repos"
 
-# Major bump (v1.0.0 -> v2.0.0)
-git commit -m "feat!: change API structure
+# 🔴 Major: v1.0.0 → v2.0.0
+git commit -m "feat!: restructure input parameters
 
-BREAKING CHANGE: action inputs have been restructured"
+BREAKING CHANGE: renamed 'file-list' to 'output-file'"
 ```
 
-# Below is an example of the generated file list in Markdown format
+> 📚 **Learn More**: See [VERSIONING.md](VERSIONING.md) for complete release documentation.
+
+---
+
+## 📊 Output Examples
+
+### 🎭 Markdown Format Preview
 
 ```markdown
-# ## File List
+## File List
 
-# Here is a list of files included in this repository:
+### Repo Root
 
-## Repo Root
+- [.gitignore](https://github.com/user/repo/blob/main/.gitignore)
+- [README.md](https://github.com/user/repo/blob/main/README.md)
+- [requirements.txt](https://github.com/user/repo/blob/main/requirements.txt)
 
-- [.gitignore](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.gitignore)
-- [dockerfile](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/dockerfile)
-- [file_list.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.html)
-- [readme.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/readme.html)
-- [README.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/README.md)
-- [file_list.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.md)
-- [requirements.txt](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/requirements.txt)
+### Python
 
-## YAML
-
-- [.github/workflows/main.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.github/workflows/main.yml)
-- [action.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/action.yml)
-
-## src
-
-- [src/generate_file_list.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/src/generate_file_list.py)
+- [src/app.py](https://github.com/user/repo/blob/main/src/app.py)
+- [tests/test_app.py](https://github.com/user/repo/blob/main/tests/test_app.py)
 ```
 
-## Example of the Generated File List in Markdown Format (Without Codeblock)
+### 🌈 HTML Format Preview
+
+The HTML output includes:
+
+- ✨ Vibrant color-coded file links
+- 📱 Responsive lazy loading
+- 🎯 Organized categorization
+- ⚡ Performance-optimized rendering
+
+> 🌐 **Live Demo**: Visit our [GitHub Pages](https://nick2bad4u.github.io/generate-repo-file-list/) to see HTML output in action!
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. 🍴 Fork the repository
+2. 🌿 Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. ✅ Commit your changes (`git commit -m 'feat: add some amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
+5. 🎉 Open a Pull Request
+
+---
+
+## 📄 License
+
+This is free and unencumbered software released into the **public domain** under [The Unlicense](LICENSE).
+
+Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.
+
+For more information, see <https://unlicense.org>.
+
+---
+
+## 🙏 Acknowledgments
+
+- Built with ❤️ using Python and GitHub Actions
+- Inspired by the need for better repository documentation
+- Thanks to all contributors and users!
+
+---
+
+<div align="center">
+
+### ⭐ If you find this useful, please star the repository!
+
+Made with 💙 by [Nick2bad4u](https://github.com/Nick2bad4u)
+
+[Report Bug](https://github.com/Nick2bad4u/generate-repo-file-list/issues) • [Request Feature](https://github.com/Nick2bad4u/generate-repo-file-list/issues) • [View Releases](https://github.com/Nick2bad4u/generate-repo-file-list/releases)
+
+</div>
+
+---
 
 <!-- FILE_LIST_START -->
 
-### ## File List
-
-### Here is a list of files included in this repository
-
-### ## Repo Root
-
-- [.gitignore](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.gitignore)
-- [dockerfile](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/dockerfile)
-- [file_list.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.html)
-- [readme.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/readme.html)
-- [README.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/README.md)
-- [file_list.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.md)
-- [requirements.txt](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/requirements.txt)
-
-### ## YAML
-
-- [.github/workflows/main.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.github/workflows/main.yml)
-- [action.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/action.yml)
-
-### ## src
-
-- [src/generate_file_list.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/src/generate_file_list.py)
-<!-- FILE_LIST_END -->
-
-# Below is an example of the generated file list in HTML format
-
-```html
-
-# ## File List
+## File List
 
 # Here is a list of files included in this repository:
 
-<li><h2>Repo Root</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.gitignore" style="color: #44ed0b;">.gitignore</a></li>
-<li><a href="https://github.com/author/repo/blob/main/README.md" style="color: #a38c7a;">README.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/dockerfile" style="color: #31e38c;">dockerfile</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.html" style="color: #38ccce;">file_list.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.md" style="color: #24ef06;">file_list.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/readme.html" style="color: #40f616;">readme.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/requirements.txt" style="color: #9eb57c;">requirements.txt</a></li>
-<li><h2>YAML</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.github/workflows/main.yml" style="color: #c39504;">.github/workflows/main.yml</a></li>
-<li><a href="https://github.com/author/repo/blob/main/action.yml" style="color: #b689b8;">action.yml</a></li>
-<li><h2>src</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/src/generate_file_list.py" style="color: #f8b688;">src/generate_file_list.py</a></li>
-</ul>
+### Repo Root
+
+- [.gitignore](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.gitignore)
+- [.jsbeautifyrc](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.jsbeautifyrc)
+- [.prettierrc](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.prettierrc)
+- [CNAME](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/CNAME)
+- [CODE_OF_CONDUCT.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/CODE_OF_CONDUCT.md)
+- [CONTRIBUTING.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/CONTRIBUTING.md)
+- [LICENSE](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/LICENSE)
+- [README.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/README.md)
+- [VERSIONING.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/VERSIONING.md)
+- [dockerfile](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/dockerfile)
+- [file_list.html](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.html)
+- [file_list.md](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/file_list.md)
+- [requirements.txt](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/requirements.txt)
+
+### JavaScript
+
+- [.eslintrc.js](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.eslintrc.js)
+
+### YAML
+
+- [.github/workflows/auto-release.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.github/workflows/auto-release.yml)
+- [.github/workflows/main.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/.github/workflows/main.yml)
+- [action.yml](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/action.yml)
+
+### src
+
+- [src/**init**.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/src/__init__.py)
+- [src/generate_file_list.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/src/generate_file_list.py)
+
+### tests
+
+- [tests/test_generate_file_list.py](https://github.com/Nick2bad4u/generate-repo-file-list/blob/main/tests/test_generate_file_list.py)
+
+<!-- FILE_LIST_END -->
+
+---
+
+## 📋 Example Output
+
+### Markdown Format
+
+The Markdown output generates clean, standard Markdown links organized by category:
+
+```markdown
+## File List
+
+# Here is a list of files included in this repository:
+
+### Repo Root
+
+- [.gitignore](https://github.com/your-org/your-repo/blob/main/.gitignore)
+- [README.md](https://github.com/your-org/your-repo/blob/main/README.md)
+- [package.json](https://github.com/your-org/your-repo/blob/main/package.json)
+
+### JavaScript
+
+- [index.js](https://github.com/your-org/your-repo/blob/main/index.js)
+- [utils.js](https://github.com/your-org/your-repo/blob/main/utils.js)
+
+### Python
+
+- [src/main.py](https://github.com/your-org/your-repo/blob/main/src/main.py)
+- [tests/test_main.py](https://github.com/your-org/your-repo/blob/main/tests/test_main.py)
 ```
 
-## Example of the Generated File List in HTML Format (Without Codeblock)
+### HTML Format
 
-### If this is viewed on Github, you wont see the proper formatting, check our github-pages URL to see the proper formatting
+The HTML output includes vibrant colors, lazy loading for performance, and responsive design:
 
-## ## File List
+```html
+<h1>## File List</h1>
+<p># Here is a list of files included in this repository:</p>
 
-## Here is a list of files included in this repository
+<div
+ class="lazyload-placeholder"
+ data-content="file-list-1"
+ style="min-height: 400px;"
+></div>
 
-<li><h2>Repo Root</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.gitignore" style="color: #44ed0b;">.gitignore</a></li>
-<li><a href="https://github.com/author/repo/blob/main/README.md" style="color: #a38c7a;">README.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/dockerfile" style="color: #31e38c;">dockerfile</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.html" style="color: #38ccce;">file_list.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/file_list.md" style="color: #24ef06;">file_list.md</a></li>
-<li><a href="https://github.com/author/repo/blob/main/readme.html" style="color: #40f616;">readme.html</a></li>
-<li><a href="https://github.com/author/repo/blob/main/requirements.txt" style="color: #9eb57c;">requirements.txt</a></li>
-<li><h2>YAML</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/.github/workflows/main.yml" style="color: #c39504;">.github/workflows/main.yml</a></li>
-<li><a href="https://github.com/author/repo/blob/main/action.yml" style="color: #b689b8;">action.yml</a></li>
-<li><h2>src</h2></li>
-<li><a href="https://github.com/author/repo/blob/main/src/generate_file_list.py" style="color: #f8b688;">src/generate_file_list.py</a></li>
-</ul>
+<script>
+ // Lazy loading script with viewport-aware configuration
+ // Chunks load progressively as user scrolls
+ // Colors randomly generated for visual distinction
+</script>
+```
+
+**Live HTML Preview:** View the actual generated HTML with colors and lazy loading at [GitHub Pages](https://nick2bad4u.github.io/generate-repo-file-list/file_list.html)
+
+> **Note:** GitHub's Markdown renderer doesn't display inline HTML styles. For the full colorful experience, view the HTML file directly or through GitHub Pages.
